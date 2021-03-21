@@ -1,8 +1,15 @@
 .container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
-    height: 90vh;
+    height: 45vh;
+}
+
+.filterList {
+    margin: auto 0;
+    padding: 10px;
+    text-align: center;
 }
 
 input[type="text"] {
