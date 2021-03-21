@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "./App.css";
-const { getCode, getNames, getNameList, getName } = require('country-list');
+const { getNameList } = require('country-list');
 
 function App() {
     const [search, setSearch] = useState("enter country");
@@ -13,12 +13,10 @@ function App() {
 
     let filteredCountries = countries.filter(searchCountry);
 
-    console.log(filteredCountries)
-
     let filtList = [];
     if (search.length > 0) {
         filteredCountries.map((country, index) => {
-            filtList.push(<p>{country}</p>)
+            return filtList.push(<p>{country}</p>)
         })
     } else {
         filtList = "";
@@ -29,9 +27,16 @@ function App() {
             <div className="container">
                 <div className="searchBar">
                     <input type="text" placeholder={search} onChange={e => {
-                        setSearch(e.target.value);
-                    }} />
-                </div>
+                        if (e.target.value === "") {
+                            setSearch("enter country") 
+                        } else {
+                            setSearch(e.target.value);
+                        }
+                    }} onBlur={e => { 
+                        if (e.target.value === "") { 
+                            setSearch("enter country") 
+                            } }} />
+                </div>  
             </div>
             <div className="filterList">
                 {filtList[0]}
