@@ -10,6 +10,15 @@ function App() {
     const countries = Object.keys(getNameList());
 
     console.log(getNameList());
+    // TODO: implement updating of country list to this format
+    // [
+    //     {
+    //         id: 0,
+    //         name: "afghanistan",
+    //         code: "AF",
+    //         email: false,
+    //     },
+    // ];
 
     // called from Country.js's addButton onClick
     let addCountry = (country) => {
