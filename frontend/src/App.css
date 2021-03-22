@@ -1,0 +1,72 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 45vh;
+}
+
+.filterList {
+    margin: auto 0;
+    padding: 10px;
+    text-align: center;
+}
+
+input[type="text"] {
+    border: none;
+    border-bottom: 2px solid black;
+    transition: width 0.4s ease-in-out;
+    font-size: xx-large;
+}
+
+input[type="text"]:focus {
+    outline: none;
+}
+
+.country {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid black;
+    margin: 1vh auto;
+    max-width: 800px;
+}
+
+.country button {
+    margin: 10px;
+    padding: 2px;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    justify-self: end;
+    background-color: #43f094;
+    border: none;
+    transition: 0.4s;
+}
+
+.country button:focus {
+    border: none;
+    outline: none;
+}
+
+.country button:hover {
+    width: 10vh;
+}
+
+.buttonFlex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.plus {
+    font-size: xx-large;
+}
+
+.cName {
+    margin-left: 1vh;
+}
+
+.addButtonText {
+    margin-left: 2vh;
+    width: 6vh;
+}
