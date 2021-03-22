@@ -21,3 +21,21 @@ frontend/.env.production.local
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# npm
+backend/node_modules
+backend/package-lock.json
+backend/*.log
+backend/*.gz
+
+
+# Coveralls
+backend/coverage
+
+# Benchmarking
+backend/benchmarks/graphs
