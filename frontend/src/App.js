@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import "./App.css";
 import Country from "./Country";
-const { getNameList } = require("country-list");
 
 function App() {
     const [search, setSearch] = useState("enter country");
-    const [emailList, setEmailList] = useState([{}]);
+    const [emailList, setEmailList] = useState(new Array());
+    const [next, setNext] = useState(false);
 
-    const countries = Object.keys(getNameList());
+    const countriesJson = require("./countries.json");
 
-    console.log(getNameList());
-    // TODO: implement updating of country list to this format
-    // [
-    //     {
-    //         id: 0,
-    //         name: "afghanistan",
-    //         code: "AF",
-    //         email: false,
-    //     },
-    // ];
+    let objectToArray = (objectIn) => {
+        let outArray = [];
+        for (let i = 0; i < objectIn.length; i++) {
+            outArray.push(objectIn[i].Country.toLowerCase());
+        }
+        return outArray;
+    };
+
+    const countries = objectToArray(countriesJson);
 
     // called from Country.js's addButton onClick
     let addCountry = (country) => {
@@ -33,6 +32,8 @@ function App() {
             setEmailList([...emailList, { name: country }]);
         }
     };
+
+    console.log(emailList);
 
     let filteredCountries = countries.filter((slookfor) => {
         return slookfor.includes(search.toLowerCase());
@@ -53,33 +54,54 @@ function App() {
         filtList = "";
     }
 
+    let nextButton = () => {
+        if (emailList.length > 0) {
+            return (
+                <button
+                    onClick={() => {
+                        setNext(true);
+                    }}
+                >
+                    next
+                </button>
+            );
+        }
+    };
+
     return (
         <>
-            <div className="container">
-                <div className="searchBar">
-                    <input
-                        type="text"
-                        placeholder={search}
-                        onChange={(e) => {
-                            if (e.target.value === "") {
-                                setSearch("enter country");
-                            } else {
-                                setSearch(e.target.value);
-                            }
-                        }}
-                        onBlur={(e) => {
-                            if (e.target.value === "") {
-                                setSearch("enter country");
-                            }
-                        }}
-                    />
+            <div className="vertFlex">
+                <div className="container">
+                    <div className="searchBar">
+                        {!next && ( // TODO: this is cheap, and needs to be placed with react router for scalability.
+                            <input
+                                type="text"
+                                placeholder={search}
+                                onChange={(e) => {
+                                    if (e.target.value === "") {
+                                        setSearch("enter country");
+                                    } else {
+                                        setSearch(e.target.value);
+                                    }
+                                }}
+                                onBlur={(e) => {
+                                    if (e.target.value === "") {
+                                        setSearch("enter country");
+                                    }
+                                }}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
-            <div className="filterList">
-                {filtList[0]}
-                {filtList[1]}
-                {filtList[2]}
-                {filtList[3]}
+                {!next && (
+                    <div className="filterList">
+                        {filtList[0]}
+                        {filtList[1]}
+                        {filtList[2]}
+                        {filtList[3]}
+                    </div>
+                )}
+                <div className="bottomBar">{nextButton()}</div>
             </div>
         </>
     );

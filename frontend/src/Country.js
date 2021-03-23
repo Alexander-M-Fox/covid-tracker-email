@@ -4,6 +4,7 @@ import "./App.css";
 function Country(props) {
     const [showAdd, setShowAdd] = useState(false);
     // const [divStyle, setDivStyle] = useState({ backgroundColor: "white" });
+
     return (
         <div className="country">
             {/* style={divStyle}> */}
@@ -23,9 +24,9 @@ function Country(props) {
                     }}
                 >
                     <span className="plus">&#43;</span>
-                    {showAdd && (
+                    {/* {showAdd && (
                         <span className="addButtonText">add to email list</span>
-                    )}
+                    )} */}
                 </button>
             </div>
         </div>

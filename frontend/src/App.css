@@ -10,12 +10,12 @@
     margin: auto 0;
     padding: 10px;
     text-align: center;
+    min-height: 42vh;
 }
 
 input[type="text"] {
     border: none;
     border-bottom: 2px solid black;
-    transition: width 0.4s ease-in-out;
     font-size: xx-large;
 }
 
@@ -41,6 +41,8 @@ input[type="text"]:focus {
     background-color: #43f094;
     border: none;
     transition: 0.4s;
+    width: 5vh;
+    color: black;
 }
 
 .country button:focus {
@@ -49,7 +51,13 @@ input[type="text"]:focus {
 }
 
 .country button:hover {
-    width: 10vh;
+    /* width: 10vh; */
+    color: white;
+    transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
 }
 
 .buttonFlex {
@@ -69,4 +77,54 @@ input[type="text"]:focus {
 .addButtonText {
     margin-left: 2vh;
     width: 6vh;
+}
+
+.bottomBar {
+    display: flex;
+    justify-content: flex-end;
+    min-height: 10vh;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #00dc66;
+    /* flex: 1; */
+}
+
+.bottomBar button {
+    width: 180px;
+    background-color: #43f094;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    box-shadow: 0;
+    border: #43f094;
+    font-size: 40px;
+    font-weight: bolder;
+    color: #002612;
+}
+
+.bottomBar button:hover {
+    color: #e3fcee;
+    transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+}
+
+.bottomBar button:focus {
+    outline: none;
+}
+
+.vertFlex {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 100%;
+}
+
+html,
+body {
+    height: 100%;
+    min-height: 100%;
 }

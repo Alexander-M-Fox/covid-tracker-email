@@ -1,12 +1,24 @@
 // Imports
 const express = require("express");
 const path = require("path");
+const moment = require("moment");
+const axios = require("axios").default;
 
 // Initialisation
 const app = express();
 
+const logger = (req, res, next) => {
+    console.log(
+        `${req.method}  -  ${req.protocol}://${req.get("host")}${
+            req.originalUrl
+        }  -  ${moment().format()}`
+    );
+    next();
+};
+
 // Middleware
 app.use(express.json());
+app.use(logger);
 
 // Routes
 app.get("/", (req, res) => {
@@ -15,7 +27,14 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
-    res.json(req.body);
+    console.log("webhooks endpoint used");
+    console.log(req.body);
+    res.json({ msg: "ok" });
+});
+
+app.post("/api/covid/countries", (req, res) => {
+    console.log(req.body);
+    res.json({ msg: "ok" });
 });
 
 // Port assignment
