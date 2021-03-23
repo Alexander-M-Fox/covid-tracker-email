@@ -1,6 +1,11 @@
 import React from "react";
+const axios = require("axios");
 
 function Comparison(props) {
+    axios.post("/api/covid/countries", props.compareList).then((res) => {
+        console.table("response of /api/covid/countries post request", res);
+    });
+
     return (
         <div>
             <h1>comparison page</h1>
