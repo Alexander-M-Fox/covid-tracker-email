@@ -1,16 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 const axios = require("axios");
 
 function Comparison(props) {
-    axios.post("/api/covid/countries", props.compareList).then((res) => {
-        console.table("response of /api/covid/countries post request", res);
-        covidData = res.body;
-    });
+    const [covidData, setCovidData] = useState();
+
+    useEffect(() => {
+        axios.post("/api/covid/countries", props.compareList).then((res) => {
+            console.table("response of /api/covid/countries post request", res);
+            setCovidData(res.data);
+        });
+    }, []); // [] = when 'nothing' changes --> only run on first render (aka onMount)
 
     return (
-        <div>
+        <>
             <h1>comparison page</h1>
-        </div>
+            {!covidData && <p>loading...</p>}
+            <div className="grid">
+                {covidData &&
+                    covidData.map((country, index) => {
+                        return (
+                            <div key={index}>
+                                <h3 className="h3Underlined">
+                                    {country.Country}
+                                </h3>
+                                <p>
+                                    <b>New data</b>
+                                </p>
+                                <table className="dataTable">
+                                    <tbody>
+                                        <tr>
+                                            <td>New Cases</td>
+                                            <td>{country.NewConfirmed}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>New Deaths</td>
+                                            <td>{country.NewDeaths}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>New Recovered</td>
+                                            <td>{country.NewRecovered}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p>
+                                    <b>Total data</b>
+                                </p>
+                                <table className="dataTable">
+                                    <tbody>
+                                        <tr>
+                                            <td>Total Cases</td>
+                                            <td>{country.TotalConfirmed}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Deaths</td>
+                                            <td>{country.TotalDeaths}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Recovered</td>
+                                            <td>{country.TotalRecovered}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                {/* <p>{country.NewConfirmed}</p> */}
+                            </div>
+                        );
+                    })}
+            </div>
+        </>
     );
 }
 
