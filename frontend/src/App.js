@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function App() {
     // a list of countries to be sent to users email, NOT a list of emails.
-    const [compareList, setCompareList] = useState(new Array());
+    const [compareList, setCompareList] = useState([]);
 
     const countriesJson = require("./countries.json");
 
@@ -36,18 +36,17 @@ function App() {
 
     console.log(compareList);
 
-    let nextButton = () => {
-        let barBottom = "";
-        if (compareList.length > 0) {
-            barBottom = (
-                <div className="bottomBar">
-                    <button>next</button>
-                </div>
-            );
-        } else {
-            barBottom = "";
+    let displayNext = false;
+    if (compareList.length > 0) {
+        displayNext = true;
+    }
+
+    let displaySelectedCountries = () => {
+        let selectedCountries = [];
+        for (let c in compareList) {
+            selectedCountries.push(<p key={c}>{compareList[c].name}</p>);
         }
-        return barBottom;
+        return selectedCountries;
     };
 
     return (
@@ -58,12 +57,23 @@ function App() {
                         <SelectCountry
                             countries={countries}
                             addCountry={addCountry}
+                            compareList={compareList}
                         />
-                        <Link to="/compare">{nextButton()}</Link>
+                        {displayNext && (
+                            <div className="bottomBar">
+                                {displaySelectedCountries()}
+                                <Link to="/compare">
+                                    <button>next</button>
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </Route>
                 <Route path="/compare">
                     <Comparison compareList={compareList} />
+                </Route>
+                <Route path="/email">
+                    <p>test</p>
                 </Route>
             </Switch>
         </Router>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 const axios = require("axios");
 
 function Comparison(props) {
@@ -13,58 +14,64 @@ function Comparison(props) {
 
     return (
         <>
-            <h1>comparison page</h1>
-            {!covidData && <p>loading...</p>}
             <div className="grid">
+                <div className="gridHeader">
+                    <h1>comparison page</h1>
+                </div>
+                {!covidData && <p>loading...</p>}
                 {covidData &&
                     covidData.map((country, index) => {
                         return (
                             <div key={index}>
                                 <h3 className="h3Underlined">
-                                    {country.Country}
+                                    {country.Country.toLowerCase()}
                                 </h3>
                                 <p>
-                                    <b>New data</b>
+                                    <b>new data</b>
                                 </p>
                                 <table className="dataTable">
                                     <tbody>
                                         <tr>
-                                            <td>New Cases</td>
+                                            <td>new cases</td>
                                             <td>{country.NewConfirmed}</td>
                                         </tr>
                                         <tr>
-                                            <td>New Deaths</td>
+                                            <td>new deaths</td>
                                             <td>{country.NewDeaths}</td>
                                         </tr>
                                         <tr>
-                                            <td>New Recovered</td>
+                                            <td>new recovered</td>
                                             <td>{country.NewRecovered}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                                 <p>
-                                    <b>Total data</b>
+                                    <b>total data</b>
                                 </p>
                                 <table className="dataTable">
                                     <tbody>
                                         <tr>
-                                            <td>Total Cases</td>
+                                            <td>total cases</td>
                                             <td>{country.TotalConfirmed}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Deaths</td>
+                                            <td>total deaths</td>
                                             <td>{country.TotalDeaths}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Recovered</td>
+                                            <td>total recovered</td>
                                             <td>{country.TotalRecovered}</td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                {/* <p>{country.NewConfirmed}</p> */}
                             </div>
                         );
                     })}
+                <div className="bottomBar">
+                    <Link to="/email">
+                        <button>get daily emails</button>
+                    </Link>
+                </div>
             </div>
         </>
     );

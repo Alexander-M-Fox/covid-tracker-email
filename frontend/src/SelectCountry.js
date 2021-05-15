@@ -16,6 +16,7 @@ function SelectCountry(props) {
                 <Country
                     country={country}
                     addCountry={props.addCountry}
+                    compareList={props.compareList}
                     key={index}
                 />
             );

@@ -82,7 +82,7 @@ input[type="text"]:focus {
 .bottomBar {
     display: flex;
     justify-content: flex-end;
-    min-height: 10vh;
+    height: 10vh;
     position: fixed;
     left: 0;
     bottom: 0;
@@ -92,7 +92,7 @@ input[type="text"]:focus {
 }
 
 .bottomBar button {
-    width: 180px;
+    width: 300px;
     background-color: #43f094;
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
@@ -101,6 +101,7 @@ input[type="text"]:focus {
     font-size: 40px;
     font-weight: bolder;
     color: #002612;
+    height: 100%;
 }
 
 .bottomBar button:hover {
@@ -114,6 +115,14 @@ input[type="text"]:focus {
 
 .bottomBar button:focus {
     outline: none;
+}
+
+.bottomBar p {
+    color: white;
+    padding-right: 3vh;
+    padding-top: 1.5vh;
+    font-size: large;
+    font-weight: bold;
 }
 
 .vertFlex {
@@ -138,21 +147,28 @@ body {
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-auto-rows: minmax(200px, auto);
+    grid-auto-rows: minmax(50px, auto);
     grid-gap: 1em;
+    padding-bottom: 10px;
     /* justify-items: space-between;
     align-items: stretch; */
+}
+
+.grid > .gridHeader {
+    grid-column: 1/4;
 }
 
 .grid > div {
     /* background-color: #444;
     color: #eee; */
-    padding: 1em;
+    padding-bottom: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .dataTable {
     width: 100%;
-    padding-bottom: 2em;
+    padding-bottom: 1em;
     border-spacing: 0;
 }
 

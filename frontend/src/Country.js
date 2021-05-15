@@ -1,32 +1,30 @@
+import { buildQueries } from "@testing-library/dom";
 import React, { useState } from "react";
 import "./App.css";
 
 function Country(props) {
-    const [showAdd, setShowAdd] = useState(false);
-    // const [divStyle, setDivStyle] = useState({ backgroundColor: "white" });
+    let thisStyle = {};
+    for (let c in props.compareList) {
+        if (props.compareList[c].name === props.country) {
+            thisStyle = {
+                backgroundColor: "#43f094",
+            };
+        }
+    }
 
     return (
-        <div className="country">
-            {/* style={divStyle}> */}
+        <div className="country" style={thisStyle}>
             <div className="cName">
                 <p>{props.country}</p>
             </div>
             <div className="addButton">
                 <button
                     className="buttonFlex"
-                    onMouseEnter={() => setShowAdd(true)}
-                    onMouseLeave={() => setShowAdd(false)}
-                    // onClick={() => {
-                    //     setDivStyle({ backgroundColor: "#43f094" });
-                    // }}
                     onClick={() => {
                         props.addCountry(props.country);
                     }}
                 >
                     <span className="plus">&#43;</span>
-                    {/* {showAdd && (
-                        <span className="addButtonText">add to email list</span>
-                    )} */}
                 </button>
             </div>
         </div>
