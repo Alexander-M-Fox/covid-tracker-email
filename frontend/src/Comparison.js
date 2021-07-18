@@ -12,6 +12,10 @@ function Comparison(props) {
         });
     }, []); // [] = when 'nothing' changes --> only run on first render (aka onMount)
 
+    let addCommas = (intIn) => {
+        return intIn.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     return (
         <>
             <div className="grid">
@@ -24,7 +28,7 @@ function Comparison(props) {
                         return (
                             <div key={index}>
                                 <h3 className="h3Underlined">
-                                    {country.Country.toLowerCase()}
+                                    {country.country.toLowerCase()}
                                 </h3>
                                 <p>
                                     <b>new data</b>
@@ -33,15 +37,23 @@ function Comparison(props) {
                                     <tbody>
                                         <tr>
                                             <td>new cases</td>
-                                            <td>{country.NewConfirmed}</td>
+                                            <td>
+                                                {addCommas(country.todayCases)}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>new deaths</td>
-                                            <td>{country.NewDeaths}</td>
+                                            <td>
+                                                {addCommas(country.todayDeaths)}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>new recovered</td>
-                                            <td>{country.NewRecovered}</td>
+                                            <td>
+                                                {addCommas(
+                                                    country.todayRecovered
+                                                )}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -52,15 +64,17 @@ function Comparison(props) {
                                     <tbody>
                                         <tr>
                                             <td>total cases</td>
-                                            <td>{country.TotalConfirmed}</td>
+                                            <td>{addCommas(country.cases)}</td>
                                         </tr>
                                         <tr>
                                             <td>total deaths</td>
-                                            <td>{country.TotalDeaths}</td>
+                                            <td>{addCommas(country.deaths)}</td>
                                         </tr>
                                         <tr>
                                             <td>total recovered</td>
-                                            <td>{country.TotalRecovered}</td>
+                                            <td>
+                                                {addCommas(country.recovered)}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

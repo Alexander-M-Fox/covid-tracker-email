@@ -58,20 +58,18 @@ app.post("/api/covid/countries", (req, res) => {
     for (let k = 0; k < req.body.length; k++) {
         // for every country requested
         console.log(`req.body[k].name ${req.body[k].name}`);
-        for (let i = 0; i < covidRead.Countries.length; i++) {
+        for (let i = 0; i < covidRead.length; i++) {
             // for every country in the covid data
-            if (
-                req.body[k].name == covidRead.Countries[i].Country.toLowerCase()
-            ) {
+            if (req.body[k].name == covidRead[i].country.toLowerCase()) {
                 // covid data found for request[k]'s country
                 console.log(
                     `Math found for requests: ${
                         req.body[k].name
-                    }.  Matching coutnry in covid json: ${covidRead.Countries[
+                    }.  Matching coutnry in covid json: ${covidRead[
                         i
-                    ].Country.toLowerCase()}`
+                    ].country.toLowerCase()}`
                 );
-                resCovidData.push(covidRead.Countries[i]);
+                resCovidData.push(covidRead[i]);
             }
         }
     }
@@ -177,6 +175,48 @@ app.post("/api/discord", async (req, res) => {
         });
 
     // res.json(req.body);
+});
+
+app.get("/admin/createCountryList", (req, res) => {
+    // read covidData.json
+
+    let readJson = (path) => {
+        try {
+            return fs.readFileSync(path, "utf8");
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+    };
+
+    let covidRead = JSON.parse(
+        readJson(path.join(__dirname, "covidData.json"))
+    );
+
+    // extrapolate coutnries from covidData.json
+
+    let countries = [];
+
+    for (let i = 0; i < covidRead.length; i++) {
+        countries.push({
+            name: covidRead[i].country,
+            iso2: covidRead[i].countryInfo.iso2,
+            iso3: covidRead[i].countryInfo.iso3,
+        });
+    }
+
+    // write the countries out in a different file
+
+    try {
+        fs.writeFileSync(
+            path.join(__dirname, "countries.json"),
+            JSON.stringify(countries)
+        );
+        res.json({ msg: "Covid data updated", success: "true" });
+    } catch (err) {
+        console.error(err);
+        res.json({ msg: "Error writing covid data", success: "false" });
+    }
 });
 
 // Port assignment

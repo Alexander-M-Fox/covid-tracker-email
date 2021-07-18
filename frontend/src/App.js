@@ -14,7 +14,7 @@ function App() {
     let objectToArray = (objectIn) => {
         let outArray = [];
         for (let i = 0; i < objectIn.length; i++) {
-            outArray.push(objectIn[i].Country.toLowerCase());
+            outArray.push(objectIn[i].name.toLowerCase());
         }
         return outArray;
     };
