@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import SelectCountry from "./SelectCountry";
 import Comparison from "./Comparison";
+import Notify from "./Notify";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function App() {
@@ -72,8 +73,11 @@ function App() {
                 <Route path="/compare">
                     <Comparison compareList={compareList} />
                 </Route>
-                <Route path="/email">
-                    <p>test</p>
+                <Route path="/notify">
+                    <Notify compareList={compareList} />
+                </Route>
+                <Route path="/finish">
+                    <p>done</p>
                 </Route>
             </Switch>
         </Router>

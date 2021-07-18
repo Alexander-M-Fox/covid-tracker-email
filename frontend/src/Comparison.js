@@ -67,11 +67,11 @@ function Comparison(props) {
                             </div>
                         );
                     })}
-                <div className="bottomBar">
-                    <Link to="/email">
-                        <button>get daily emails</button>
-                    </Link>
-                </div>
+            </div>
+            <div className="bottomBar">
+                <Link to="/notify">
+                    <button>get notified</button>
+                </Link>
             </div>
         </>
     );

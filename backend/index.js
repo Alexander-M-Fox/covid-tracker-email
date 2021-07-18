@@ -4,6 +4,8 @@ const path = require("path");
 const moment = require("moment");
 const axios = require("axios").default;
 const fs = require("fs");
+const bodyParser = require("body-parser");
+require("dotenv").config();
 
 // Initialisation
 const app = express();
@@ -20,6 +22,11 @@ const logger = (req, res, next) => {
 // Middleware
 app.use(express.json());
 app.use(logger);
+app.use(
+    bodyParser.urlencoded({
+        extended: true,
+    })
+);
 
 // Routes
 app.get("/", (req, res) => {
@@ -29,8 +36,6 @@ app.get("/", (req, res) => {
 
 app.post("/webhook", (req, res) => {
     // placeholder
-    console.log("webhooks endpoint used");
-    console.log(req.body);
     res.json({ msg: "ok" });
 });
 
@@ -70,9 +75,6 @@ app.post("/api/covid/countries", (req, res) => {
             }
         }
     }
-
-    console.log(covidRead.Countries[0].Country.toLowerCase());
-    console.log(req.body[0].name);
     res.json(resCovidData);
 });
 
@@ -94,6 +96,87 @@ app.get("/api/update", (req, res) => {
             res.json({ msg: "Error writing covid data", success: "false" });
         }
     });
+});
+
+app.post("/api/discord", async (req, res) => {
+    // TODO: Input santitation
+    console.log(`req.body.discord = ${req.body.discord}`);
+    let targetURL = req.body.discord;
+    let discordData = JSON.stringify({
+        username: "Covid Tracker",
+        avatar_url: "https://i.imgur.com/ByNoBIl.png",
+        embeds: [
+            {
+                title: "Daily Covid Update",
+                url: "https://disease.sh/docs/",
+                description:
+                    "Figures may vary slightly from your county's official portal.",
+                color: 2533597,
+                fields: [
+                    {
+                        name: "Country 1",
+                        value: "Last updated: ",
+                    },
+                    {
+                        name: "`New Cases`",
+                        value: "todayCases",
+                        inline: true,
+                    },
+                    {
+                        name: "`New Deaths`",
+                        value: "todayDeaths",
+                        inline: true,
+                    },
+                    {
+                        name: "Country 2",
+                        value: "Last updated: ",
+                    },
+                    {
+                        name: "`New Cases`",
+                        value: "todayCases",
+                        inline: true,
+                    },
+                    {
+                        name: "`New Deaths`",
+                        value: "todayDeaths",
+                        inline: true,
+                    },
+                ],
+                thumbnail: {
+                    url: "https://upload.wikimedia.org/wikipedia/commons/3/38/4-Nature-Wallpapers-2014-1_ukaavUI.jpg",
+                },
+                image: {
+                    url: "https://upload.wikimedia.org/wikipedia/commons/5/5a/A_picture_from_China_every_day_108.jpg",
+                },
+                footer: {
+                    text: "Data sourced from https://disease.sh/docs/ (click title to follow link)",
+                    icon_url:
+                        "https://copyright.co.uk/images/copyright-symbol.png",
+                },
+            },
+        ],
+    });
+
+    let discordConfig = {
+        method: "post",
+        url: targetURL,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: discordData,
+    };
+
+    axios(discordConfig)
+        .then(function (response) {
+            console.log(JSON.stringify(response.data));
+            res.send("true");
+        })
+        .catch(function (error) {
+            console.log(error);
+            res.send("false");
+        });
+
+    // res.json(req.body);
 });
 
 // Port assignment
