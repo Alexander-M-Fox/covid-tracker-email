@@ -50,8 +50,7 @@ function Notify(props) {
                         onClick={async () => {
                             // TODO: frontend validation
                             let data = qs.stringify({
-                                discord:
-                                    "https://discord.com/api/webhooks/854801737785409546/w1BevBw4At7fDf1eyVdFbao7c_Y0ZPTAA8uoKRBcHrNkWWIZLqxSiYH3E5oazSWdD-DB",
+                                discord: discord,
                             });
                             let config = {
                                 method: "post",
