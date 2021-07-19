@@ -51,6 +51,7 @@ function Notify(props) {
                             // TODO: frontend validation
                             let data = qs.stringify({
                                 discord: discord,
+                                countries: props.compareList,
                             });
                             let config = {
                                 method: "post",

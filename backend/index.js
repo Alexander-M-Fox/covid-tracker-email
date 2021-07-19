@@ -14,7 +14,7 @@ const logger = (req, res, next) => {
     console.log(
         `${req.method}  -  ${req.protocol}://${req.get("host")}${
             req.originalUrl
-        }  -  ${moment().format()}`
+        }  -  ${moment().format()}`,
     );
     next();
 };
@@ -25,8 +25,25 @@ app.use(logger);
 app.use(
     bodyParser.urlencoded({
         extended: true,
-    })
+    }),
 );
+
+// bring covid data in for all endpoints.
+let readJson = (path) => {
+    try {
+        return fs.readFileSync(path, "utf8");
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+};
+
+let covidRead = JSON.parse(readJson(path.join(__dirname, "covidData.json")));
+
+// add commas to numbers to enhance readability.
+let addCommas = (intIn) => {
+    return intIn.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 
 // Routes
 app.get("/", (req, res) => {
@@ -40,19 +57,6 @@ app.post("/webhook", (req, res) => {
 });
 
 app.post("/api/covid/countries", (req, res) => {
-    let readJson = (path) => {
-        try {
-            return fs.readFileSync(path, "utf8");
-        } catch (err) {
-            console.error(err);
-            return false;
-        }
-    };
-
-    let covidRead = JSON.parse(
-        readJson(path.join(__dirname, "covidData.json"))
-    );
-
     let resCovidData = new Array();
 
     for (let k = 0; k < req.body.length; k++) {
@@ -67,7 +71,7 @@ app.post("/api/covid/countries", (req, res) => {
                         req.body[k].name
                     }.  Matching coutnry in covid json: ${covidRead[
                         i
-                    ].country.toLowerCase()}`
+                    ].country.toLowerCase()}`,
                 );
                 resCovidData.push(covidRead[i]);
             }
@@ -86,7 +90,7 @@ app.get("/api/update", (req, res) => {
         try {
             fs.writeFileSync(
                 path.join(__dirname, "covidData.json"),
-                JSON.stringify(covidSummary)
+                JSON.stringify(covidSummary),
             );
             res.json({ msg: "Covid data updated", success: "true" });
         } catch (err) {
@@ -98,8 +102,55 @@ app.get("/api/update", (req, res) => {
 
 app.post("/api/discord", async (req, res) => {
     // TODO: Input santitation
-    console.log(`req.body.discord = ${req.body.discord}`);
+
+    // last updated
+    let epoch = covidRead[0].updated;
+    let d = new Date(epoch);
+    let lastUpdated = `${d.toLocaleDateString()} at ${d.toLocaleTimeString()}`;
+
+    let fields = [
+        {
+            name: "Last Updated:",
+            value: lastUpdated,
+        },
+    ];
+
     let targetURL = req.body.discord;
+    for (country in req.body.countries) {
+        fields.push(
+            {
+                name: "Country name",
+                value: "=======",
+            },
+            {
+                name: "`New Cases`",
+                value: "todayCases",
+                inline: true,
+            },
+            {
+                name: "`New Deaths`",
+                value: "todayDeaths",
+                inline: true,
+            },
+        );
+        for (countryObj in covidRead) {
+            if (
+                req.body.countries[country].name ===
+                covidRead[countryObj].country.toLowerCase()
+            ) {
+                // country name
+                fields[country * 3 + 1].name = covidRead[countryObj].country;
+                // new cases
+                fields[country * 3 + 2].value = addCommas(
+                    covidRead[countryObj].todayCases,
+                );
+                // new deaths
+                fields[country * 3 + 3].value = addCommas(
+                    covidRead[countryObj].todayDeaths,
+                );
+            }
+        }
+    }
     let discordData = JSON.stringify({
         username: "Covid Tracker",
         avatar_url: "https://i.imgur.com/ByNoBIl.png",
@@ -110,36 +161,7 @@ app.post("/api/discord", async (req, res) => {
                 description:
                     "Figures may vary slightly from your county's official portal.",
                 color: 2533597,
-                fields: [
-                    {
-                        name: "Country 1",
-                        value: "Last updated: ",
-                    },
-                    {
-                        name: "`New Cases`",
-                        value: "todayCases",
-                        inline: true,
-                    },
-                    {
-                        name: "`New Deaths`",
-                        value: "todayDeaths",
-                        inline: true,
-                    },
-                    {
-                        name: "Country 2",
-                        value: "Last updated: ",
-                    },
-                    {
-                        name: "`New Cases`",
-                        value: "todayCases",
-                        inline: true,
-                    },
-                    {
-                        name: "`New Deaths`",
-                        value: "todayDeaths",
-                        inline: true,
-                    },
-                ],
+                fields: fields,
                 thumbnail: {
                     url: "https://upload.wikimedia.org/wikipedia/commons/3/38/4-Nature-Wallpapers-2014-1_ukaavUI.jpg",
                 },
@@ -190,10 +212,10 @@ app.get("/admin/createCountryList", (req, res) => {
     };
 
     let covidRead = JSON.parse(
-        readJson(path.join(__dirname, "covidData.json"))
+        readJson(path.join(__dirname, "covidData.json")),
     );
 
-    // extrapolate coutnries from covidData.json
+    // extrapolate countries from covidData.json
 
     let countries = [];
 
@@ -210,7 +232,7 @@ app.get("/admin/createCountryList", (req, res) => {
     try {
         fs.writeFileSync(
             path.join(__dirname, "countries.json"),
-            JSON.stringify(countries)
+            JSON.stringify(countries),
         );
         res.json({ msg: "Covid data updated", success: "true" });
     } catch (err) {
