@@ -20,4 +20,4 @@ Node.js Express Backend
 
 ## API
 
-This project uses [Covid-19 API by Kyle Redelinghuys](https://covid19api.com/), advanced documentation for which can be found [here](https://documenter.getpostman.com/view/10808728/SzS8rjbc#00030720-fae3-4c72-8aea-ad01ba17adf8).
+This project uses [NOVEL CoVID19 API](https://disease.sh/docs/).
