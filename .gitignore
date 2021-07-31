@@ -42,3 +42,5 @@ backend/benchmarks/graphs
 
 # Security
 backend/.env
+frontend/.env
+.env
