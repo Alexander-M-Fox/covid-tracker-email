@@ -123,25 +123,35 @@ app.post("/api/covid/countries", (req, res) => {
     res.json(resCovidData);
 });
 
-// Admin / dev only routes TODO: update this to disease.sh api
-app.get("/api/update", (req, res) => {
-    // Get summary covid data
-    let covidSummary = [];
-    axios.get("https://api.covid19api.com/summary").then((res) => {
-        covidSummary = res.data;
-        console.log(covidSummary);
-        try {
-            fs.writeFileSync(
-                path.join(__dirname, "covidData.json"),
-                JSON.stringify(covidSummary),
-            );
-            res.json({ msg: "Covid data updated", success: "true" });
-        } catch (err) {
-            console.error(err);
-            res.json({ msg: "Error writing covid data", success: "false" });
-        }
-    });
-});
+// update covid data from the api manually via an endpoint
+app.get(
+    "/admin/update",
+    (updateData = (req, res) => {
+        // Get summary covid data
+        let covidSummary = [];
+        axios.get("https://corona.lmao.ninja/v2/countries").then((res2) => {
+            covidSummary = res2.data;
+            try {
+                fs.writeFileSync(
+                    path.join(__dirname, "covidData.json"),
+                    JSON.stringify(covidSummary),
+                );
+                console.log("data updated");
+                if (res) {
+                    res.json({ msg: "Covid data updated", success: "true" });
+                }
+            } catch (err) {
+                console.error(err);
+                if (res) {
+                    res.json({
+                        msg: "Error writing covid data",
+                        success: "false",
+                    });
+                }
+            }
+        });
+    }),
+);
 
 app.get("/api/email", (req, res) => {
     let thisHtml = `
@@ -262,6 +272,7 @@ app.post("/api/discord", async (req, res) => {
     // res.json(req.body);
 });
 
+// Create a list of countries with no data attached to be used with frontend country search suggestions
 app.get("/admin/createCountryList", (req, res) => {
     // read covidData.json
 
