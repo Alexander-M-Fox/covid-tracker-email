@@ -130,7 +130,7 @@ app.get(
     (updateData = (req, res) => {
         // Get summary covid data
         let covidSummary = [];
-        axios.get("https://corona.lmao.ninja/v2/countries").then((res2) => {
+        axios.get("https://disease.sh/v3/covid-19/countries").then((res2) => {
             covidSummary = res2.data;
             try {
                 fs.writeFileSync(

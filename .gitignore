@@ -44,3 +44,4 @@ backend/benchmarks/graphs
 backend/.env
 frontend/.env
 .env
+backend/sql_setup.sql
