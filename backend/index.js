@@ -9,10 +9,17 @@ const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 const CronJob = require("cron").CronJob;
+const { pool } = require("./dbConfig");
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+const session = require("express-session");
 require("dotenv").config();
+const initializePassport = require("./passportConfig");
+import { v4 as uuidv4 } from "uuid";
 
 // Initialisation
 const app = express();
+initializePassport(passport);
 
 const logger = (req, res, next) => {
     console.log(
@@ -31,6 +38,31 @@ app.use(
         extended: true,
     }),
 );
+
+// Passport and session management
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+    }),
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+function blockAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        //return res.redirect("/");
+    }
+    next();
+}
+
+function blockNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    //res.redirect("/");
+}
 
 // OAuth2 Config
 const OAuth2_client = new OAuth2(
@@ -94,6 +126,83 @@ app.get("/", (req, res) => {
     // react build's index.html will replace this
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
+
+app.post(
+    "/api/register",
+    blockAuthenticated,
+
+    async (req, res) => {
+        let { email, password, password2, acc_name, send_emails } = req.body;
+        let acc_id = uuidv4();
+
+        let errors = [];
+
+        if (!email || !password || !password2 || !acc_name || !send_emails) {
+            errors.push({
+                msg: "1 or more fields left empty",
+            });
+        }
+
+        if (password.length < 8) {
+            errors.push({
+                msg: "Password should be at least 8 characters",
+            });
+        }
+
+        if (password != password2) {
+            errors.push({
+                msg: "Passwords do not match",
+            });
+        }
+
+        if (errors.length > 0) {
+            return res.send({
+                success: false,
+                errors: errors,
+            });
+        } else {
+            // validation passed
+            let hashedPassword = await bcrypt.hash(password, 10);
+            pool.query(
+                `SELECT * FROM account_tbl WHERE email = $1`,
+                [email],
+                (err, results) => {
+                    if (err) {
+                        throw err;
+                    }
+
+                    if (results.rows.length > 0) {
+                        // user already registered
+                        errors.push({
+                            msg: "Email already registered",
+                        });
+                        return res.send({
+                            success: false,
+                            errors: errors,
+                        });
+                    }
+
+                    pool.query(
+                        `
+                        INSERT INTO account_tbl(acc_id, email, password, acc_name, send_emails)
+	                    VALUES ($1, $2, $3, $4, $5);
+                        RETURNING acc_id, email`,
+                        [acc_id, email, hashedPassword, acc_name, send_emails],
+                        (err, results) => {
+                            if (err) {
+                                throw err;
+                            }
+                            res.send({
+                                success: true,
+                                msg: `user created, with email ${email}`,
+                            });
+                        },
+                    );
+                },
+            );
+        }
+    },
+);
 
 app.post("/webhook", (req, res) => {
     // placeholder
