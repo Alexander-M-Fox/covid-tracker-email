@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
+const CronJob = require("cron").CronJob;
 require("dotenv").config();
 
 // Initialisation
@@ -152,6 +153,9 @@ app.get(
         });
     }),
 );
+
+// update covid data daily (@ 01:10 local time each day)
+const job = new CronJob("0 10 1 * * *", () => updateData()).start();
 
 app.get("/api/email", (req, res) => {
     let thisHtml = `
