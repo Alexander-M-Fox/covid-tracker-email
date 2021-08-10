@@ -15,7 +15,7 @@ const passport = require("passport");
 const session = require("express-session");
 require("dotenv").config();
 const initializePassport = require("./passportConfig");
-import { v4 as uuidv4 } from "uuid";
+const uuidv4 = require("uuid").v4;
 
 // Initialisation
 const app = express();
@@ -185,8 +185,8 @@ app.post(
                     pool.query(
                         `
                         INSERT INTO account_tbl(acc_id, email, password, acc_name, send_emails)
-	                    VALUES ($1, $2, $3, $4, $5);
-                        RETURNING acc_id, email`,
+	                    VALUES ($1, $2, $3, $4, $5)
+                        RETURNING acc_id, email;`,
                         [acc_id, email, hashedPassword, acc_name, send_emails],
                         (err, results) => {
                             if (err) {
