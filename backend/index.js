@@ -122,12 +122,25 @@ let addCommas = (intIn) => {
 };
 
 // Routes
+
+/**
+ * @param {string} description - Placeholder route for frontend react build index.html
+ */
 app.get("/", (req, res) => {
     // react build's index.html will replace this
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Register
+/**
+ * @param {string} description - Register a new user in the database
+ * @param {string} [inputs] email - Email that the user optionally wants covid data sent to.
+ * @param {string} [inputs] password - Password string of at least 8 characters.
+ * @param {string} [inputs] password2 - Confirm password.  Must be the same as password.
+ * @param {string} [inputs] acc_name - Name the user wants the system to refer to them as.  NOT used as primary or secondary key (therefore duplicates are allowed).
+ * @param {string} [inputs] send_emails - Boolean.  If true server will send this user daily emails containing covid data about their selected contries.
+ * @param {string} [outputs] success - Boolean, if false check error message.
+ * @param {string} [outputs] msg - Message describing handling of request.
+ */
 app.post(
     "/api/register",
     blockAuthenticated,
