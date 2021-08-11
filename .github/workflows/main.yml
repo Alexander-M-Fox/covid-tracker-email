@@ -28,4 +28,6 @@ jobs:
       - name: Generating Docs.
         id: reading-file
         uses: Pika1998/express-autodocs@v0.0.2
+        with:
+          server-filepath: backend/index.js
 
