@@ -217,8 +217,8 @@ app.post("/api/register", blockAuthenticated, async (req, res) => {
 
 /**
  * @param {string} description - Placeholder route for 3rd party API to update server's covid stats.  Not currently used in this version. 
- * @param {string} [inputs] - TBD - Feature not in use
- * @param {string} [outputs] - TBD - Feature not in use
+ * @param {string} [inputs] - tbd - Feature not in use
+ * @param {string} [outputs] - tbd - Feature not in use
  */
 app.post("/webhook", (req, res) => {
     // placeholder
@@ -256,7 +256,6 @@ app.post("/api/covid/countries", (req, res) => {
 
 /**
  * @param {string} description - Admin route to manually force server's covid data to update itself with disease.sh's API
- * @param {string} [inputs] - No params.
  * @param {string} [outputs] - success - If false see msg.
  * @param {string} [outputs] - msg - Describes handling of request.
  */
@@ -418,7 +417,6 @@ app.post("/api/discord", async (req, res) => {
 
 /**
  * @param {string} description - Admin route to create a list of countries with no data attached to be used with frontend country search suggestions.  THis list is created as a local file on the server, NOT sent back to the frontend. 
- * @param {string} [inputs] - No params
  * @param {string} [outputs] - success - If false see msg.
  * @param {string} [outputs] - msg - Describes handling of request.
  */
