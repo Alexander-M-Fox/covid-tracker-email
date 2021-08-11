@@ -141,11 +141,8 @@ app.get("/", (req, res) => {
  * @param {string} [outputs] success - Boolean, if false check error message.
  * @param {string} [outputs] msg - Message describing handling of request.
  */
-app.post(
-    "/api/register",
-    blockAuthenticated,
+app.post("/api/register", blockAuthenticated, async (req, res) => {
 
-    async (req, res) => {
         let { email, password, password2, acc_name, send_emails } = req.body;
         let acc_id = uuidv4();
 
@@ -248,9 +245,7 @@ app.post("/api/covid/countries", (req, res) => {
 });
 
 // update covid data from the api manually via an endpoint
-app.get(
-    "/admin/update",
-    (updateData = (req, res) => {
+app.get("/admin/update", updateData = (req, res) => {
         // Get summary covid data
         let covidSummary = [];
         axios.get("https://disease.sh/v3/covid-19/countries").then((res2) => {
@@ -274,7 +269,7 @@ app.get(
                 }
             }
         });
-    }),
+    },
 );
 
 // update covid data daily (@ 01:10 local time each day)
