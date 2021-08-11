@@ -127,6 +127,7 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+// Register
 app.post(
     "/api/register",
     blockAuthenticated,
