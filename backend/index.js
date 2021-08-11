@@ -215,11 +215,21 @@ app.post("/api/register", blockAuthenticated, async (req, res) => {
     },
 );
 
+/**
+ * @param {string} description - Placeholder route for 3rd party API to update server's covid stats.  Not currently used in this version. 
+ * @param {string} [inputs] - TBD - Feature not in use
+ * @param {string} [outputs] - TBD - Feature not in use
+ */
 app.post("/webhook", (req, res) => {
     // placeholder
     res.json({ msg: "ok" });
 });
 
+/**
+ * @param {string} description - Returns COVID data for 
+ * @param {string} [inputs] - compareList - JSON array of objects in format [{ "name": "countryname1" }, { "name": "countryname2" }]
+ * @param {string} [outputs] - resCovidData - JSON array of objects [ { country1_covid_data }, { country2_covid_data } ]
+ */
 app.post("/api/covid/countries", (req, res) => {
     let resCovidData = new Array();
 
@@ -244,7 +254,12 @@ app.post("/api/covid/countries", (req, res) => {
     res.json(resCovidData);
 });
 
-// update covid data from the api manually via an endpoint
+/**
+ * @param {string} description - Admin route to manually force server's covid data to update itself with disease.sh's API
+ * @param {string} [inputs] - No params.
+ * @param {string} [outputs] - success - If false see msg.
+ * @param {string} [outputs] - msg - Describes handling of request.
+ */
 app.get("/admin/update", updateData = (req, res) => {
         // Get summary covid data
         let covidSummary = [];
@@ -295,6 +310,13 @@ app.get("/api/email", (req, res) => {
     res.send("ok");
 });
 
+/**
+ * @param {string} description - Server sends custom discord message containing data on user's selected countries.
+ * @param {string} [inputs] - discord - Discord webhook URL for the server to send message to.
+ * @param {string} [inputs] - compareList - JSON array of objects in format [{ "name": "countryname1" }, { "name": "countryname2" }]
+ * @param {string} [outputs] - true - Sent if discord message was sent successfully.
+ * @param {string} [outputs] - false - Sent if discord message was NOT sent successfully.
+ */
 app.post("/api/discord", async (req, res) => {
     // TODO: Input santitation
 
@@ -394,7 +416,12 @@ app.post("/api/discord", async (req, res) => {
     // res.json(req.body);
 });
 
-// Create a list of countries with no data attached to be used with frontend country search suggestions
+/**
+ * @param {string} description - Admin route to create a list of countries with no data attached to be used with frontend country search suggestions.  THis list is created as a local file on the server, NOT sent back to the frontend. 
+ * @param {string} [inputs] - No params
+ * @param {string} [outputs] - success - If false see msg.
+ * @param {string} [outputs] - msg - Describes handling of request.
+ */
 app.get("/admin/createCountryList", (req, res) => {
     // read covidData.json
 
