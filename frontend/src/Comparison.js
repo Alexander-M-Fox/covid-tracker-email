@@ -51,7 +51,7 @@ function Comparison(props) {
                                             <td>new recovered</td>
                                             <td>
                                                 {addCommas(
-                                                    country.todayRecovered
+                                                    country.todayRecovered,
                                                 )}
                                             </td>
                                         </tr>
@@ -83,7 +83,7 @@ function Comparison(props) {
                     })}
             </div>
             <div className="bottomBar">
-                <Link to="/notify">
+                <Link to="/login">
                     <button>get notified</button>
                 </Link>
             </div>

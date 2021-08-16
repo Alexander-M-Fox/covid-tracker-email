@@ -6,6 +6,14 @@
     height: 45vh;
 }
 
+.password {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 5vh;
+}
+
 .filterList {
     margin: auto 0;
     padding: 10px;
@@ -20,6 +28,16 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
+    outline: none;
+}
+
+input[type="password"] {
+    border: none;
+    border-bottom: 2px solid black;
+    font-size: xx-large;
+}
+
+input[type="password"]:focus {
     outline: none;
 }
 

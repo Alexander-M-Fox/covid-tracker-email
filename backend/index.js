@@ -1,4 +1,5 @@
 // Imports
+//#region
 const express = require("express");
 const path = require("path");
 const moment = require("moment");
@@ -16,6 +17,7 @@ const session = require("express-session");
 require("dotenv").config();
 const initializePassport = require("./passportConfig");
 const uuidv4 = require("uuid").v4;
+//#endregion
 
 // Initialisation
 const app = express();
@@ -52,7 +54,7 @@ app.use(passport.session());
 
 function blockAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        //return res.redirect("/");
+        return res.send("you are already logged in");
     }
     next();
 }
@@ -123,14 +125,17 @@ let addCommas = (intIn) => {
 
 // Routes
 
+//#region
 /**
  * @param {string} description - Placeholder route for frontend react build index.html
  */
+//#endregion
 app.get("/", (req, res) => {
     // react build's index.html will replace this
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+//#region
 /**
  * @param {string} description - Register a new user in the database
  * @param {string} [inputs] email - Email that the user optionally wants covid data sent to.
@@ -141,95 +146,128 @@ app.get("/", (req, res) => {
  * @param {string} [outputs] success - Boolean, if false check error message.
  * @param {string} [outputs] msg - Message describing handling of request.
  */
+//#endregion
 app.post("/api/register", blockAuthenticated, async (req, res) => {
+    let { email, password, password2, acc_name, send_emails } = req.body;
+    let acc_id = uuidv4();
 
-        let { email, password, password2, acc_name, send_emails } = req.body;
-        let acc_id = uuidv4();
+    let errors = [];
 
-        let errors = [];
+    if (!email || !password || !password2 || !acc_name || !send_emails) {
+        errors.push({
+            msg: "1 or more fields left empty",
+        });
+    }
 
-        if (!email || !password || !password2 || !acc_name || !send_emails) {
-            errors.push({
-                msg: "1 or more fields left empty",
-            });
-        }
+    if (password.length < 8) {
+        errors.push({
+            msg: "Password should be at least 8 characters",
+        });
+    }
 
-        if (password.length < 8) {
-            errors.push({
-                msg: "Password should be at least 8 characters",
-            });
-        }
+    if (password != password2) {
+        errors.push({
+            msg: "Passwords do not match",
+        });
+    }
 
-        if (password != password2) {
-            errors.push({
-                msg: "Passwords do not match",
-            });
-        }
+    if (errors.length > 0) {
+        return res.send({
+            success: false,
+            errors: errors,
+        });
+    } else {
+        // validation passed
+        let hashedPassword = await bcrypt.hash(password, 10);
+        pool.query(
+            `SELECT * FROM account_tbl WHERE email = $1`,
+            [email],
+            (err, results) => {
+                if (err) {
+                    throw err;
+                }
 
-        if (errors.length > 0) {
-            return res.send({
-                success: false,
-                errors: errors,
-            });
-        } else {
-            // validation passed
-            let hashedPassword = await bcrypt.hash(password, 10);
-            pool.query(
-                `SELECT * FROM account_tbl WHERE email = $1`,
-                [email],
-                (err, results) => {
-                    if (err) {
-                        throw err;
-                    }
+                if (results.rows.length > 0) {
+                    // user already registered
+                    errors.push({
+                        msg: "Email already registered",
+                    });
+                    return res.send({
+                        success: false,
+                        errors: errors,
+                    });
+                }
 
-                    if (results.rows.length > 0) {
-                        // user already registered
-                        errors.push({
-                            msg: "Email already registered",
-                        });
-                        return res.send({
-                            success: false,
-                            errors: errors,
-                        });
-                    }
-
-                    pool.query(
-                        `
+                pool.query(
+                    `
                         INSERT INTO account_tbl(acc_id, email, password, acc_name, send_emails)
 	                    VALUES ($1, $2, $3, $4, $5)
                         RETURNING acc_id, email;`,
-                        [acc_id, email, hashedPassword, acc_name, send_emails],
-                        (err, results) => {
-                            if (err) {
-                                throw err;
-                            }
-                            res.send({
-                                success: true,
-                                msg: `user created, with email ${email}`,
-                            });
-                        },
-                    );
-                },
-            );
-        }
+                    [acc_id, email, hashedPassword, acc_name, send_emails],
+                    (err, results) => {
+                        if (err) {
+                            throw err;
+                        }
+                        res.send({
+                            success: true,
+                            msg: `user created, with email ${email}`,
+                        });
+                    },
+                );
+            },
+        );
+    }
+});
+
+app.post(
+    "/api/login",
+    blockAuthenticated,
+    passport.authenticate("local"),
+    async (req, res) => {
+        pool.query(
+            `SELECT email
+        FROM account_tbl
+        WHERE email=$1;`,
+            [req.body.email],
+            (err, results) => {
+                if (err) {
+                    throw err;
+                }
+                if (results.rows.length == 0) {
+                    return res.send({
+                        success: false,
+                        msg: "login worked, but cant find userID for that email",
+                    });
+                }
+                res.send({
+                    success: true,
+                    msg: "logged in",
+                    email: results.rows[0]["email"],
+                });
+            },
+        );
     },
 );
 
+//#region
 /**
- * @param {string} description - Placeholder route for 3rd party API to update server's covid stats.  Not currently used in this version. 
+ * @param {string} description - Placeholder route for 3rd party API to update server's covid stats.  Not currently used in this version.
  * @param {string} [inputs] TBD - Feature not in use
  * @param {string} [outputs] TBD - Feature not in use
  */
+//#endregion
 app.post("/webhook", (req, res) => {
     // placeholder
     res.json({ msg: "ok" });
 });
 
+//#region
 /**
  * @param {string} description - Returns COVID data for given countries.
  * @param {string} [inputs] compareList - JSON array of objects in format [{ "name": "countryname1" }, { "name": "countryname2" }]
  * @param {string} [outputs] resCovidData - JSON array of objects [ { country1_covid_data }, { country2_covid_data } ]
  */
+//#endregion
 app.post("/api/covid/countries", (req, res) => {
     let resCovidData = new Array();
 
@@ -254,12 +292,17 @@ app.post("/api/covid/countries", (req, res) => {
     res.json(resCovidData);
 });
 
+//#region
 /**
  * @param {string} description - Admin route to manually force server's covid data to update itself with disease.sh's API
+ * @param {string} [inputs] N/A - None.
  * @param {string} [outputs] success - If false see msg.
  * @param {string} [outputs] msg - Describes handling of request.
  */
-app.get("/admin/update", updateData = (req, res) => {
+//#endregion
+app.get(
+    "/admin/update",
+    (updateData = (req, res) => {
         // Get summary covid data
         let covidSummary = [];
         axios.get("https://disease.sh/v3/covid-19/countries").then((res2) => {
@@ -283,7 +326,7 @@ app.get("/admin/update", updateData = (req, res) => {
                 }
             }
         });
-    },
+    }),
 );
 
 // update covid data daily (@ 01:10 local time each day)
@@ -309,6 +352,7 @@ app.get("/api/email", (req, res) => {
     res.send("ok");
 });
 
+//#region
 /**
  * @param {string} description - Server sends custom discord message containing data on user's selected countries.
  * @param {string} [inputs] discord - Discord webhook URL for the server to send message to.
@@ -316,6 +360,7 @@ app.get("/api/email", (req, res) => {
  * @param {string} [outputs] true - Sent if discord message was sent successfully.
  * @param {string} [outputs] false - Sent if discord message was NOT sent successfully.
  */
+//#endregion
 app.post("/api/discord", async (req, res) => {
     // TODO: Input santitation
 
@@ -415,11 +460,14 @@ app.post("/api/discord", async (req, res) => {
     // res.json(req.body);
 });
 
+//#region
 /**
- * @param {string} description - Admin route to create a list of countries with no data attached to be used with frontend country search suggestions.  THis list is created as a local file on the server, NOT sent back to the frontend. 
+ * @param {string} description - Admin route to create a list of countries with no data attached to be used with frontend country search suggestions.  THis list is created as a local file on the server, NOT sent back to the frontend.
+ * @param {string} [inputs] N/A - None.
  * @param {string} [outputs] success - If false see msg.
  * @param {string} [outputs] msg - Describes handling of request.
  */
+//#endregion
 app.get("/admin/createCountryList", (req, res) => {
     // read covidData.json
 

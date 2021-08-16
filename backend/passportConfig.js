@@ -11,6 +11,7 @@ function initialize(passport) {
                 if (err) {
                     throw err;
                 }
+                // console.log(results.rows);
 
                 if (results.rows.length > 0) {
                     const user = results.rows[0];
@@ -18,9 +19,10 @@ function initialize(passport) {
                     bcrypt.compare(password, user.password, (err, isMatch) => {
                         if (err) {
                             console.log(err);
+                            throw err;
                         }
                         if (isMatch) {
-                            return done(null, user);
+                            return done(null, user); // creates session cookie
                         } else {
                             //password is incorrect
                             return done(null, false, {
@@ -44,12 +46,11 @@ function initialize(passport) {
             authenticateUser,
         ),
     );
-
     passport.serializeUser((user, done) => done(null, user.acc_id));
 
     passport.deserializeUser((id, done) => {
         pool.query(
-            `SELECT * FROM users WHERE id = $1`,
+            `SELECT * FROM account_tbl WHERE acc_id = $1`,
             [id],
             (err, results) => {
                 if (err) {
