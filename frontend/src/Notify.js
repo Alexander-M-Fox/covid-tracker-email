@@ -24,8 +24,16 @@ function Notify(props) {
 
     return (
         <>
-            <div className="container">
-                <div className="searchBar">
+            <div className="containerShort">
+                <div>
+                    <p>would you like...</p>
+                    <div class="choiceButtons">
+                        <button>a one off notification</button>
+                        <p>or</p>
+                        <button>daily notifications</button>
+                    </div>
+                </div>
+                {/* <div className="searchBar">
                     <input
                         type="text"
                         placeholder={discord}
@@ -42,7 +50,7 @@ function Notify(props) {
                             }
                         }}
                     />
-                </div>
+                </div> */}
             </div>
             {!empty && (
                 <div className="bottomBar">
