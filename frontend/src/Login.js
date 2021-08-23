@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 const axios = require("axios");
+const qs = require("qs");
 
 function Login() {
+    let history = useHistory();
+
     const [email, setEmail] = useState("email");
     const [password, setPassword] = useState("password");
     const [displayLogin, setDisplayLogin] = useState(false);
+    const [noAuth, setNoAuth] = useState(false);
 
     const login = () => {
         axios.post("");
@@ -56,9 +60,46 @@ function Login() {
                     />
                 </div>
             </div>
+            <div class="password">
+                <p>
+                    don't have an account? make one{" "}
+                    <Link to="/createAccount">here</Link>
+                </p>
+            </div>
             {displayLogin && (
                 <div className="bottomBar">
-                    <button onClick={() => {}}>login</button>
+                    {noAuth && <p>email and / or password incorrect</p>}
+                    <button
+                        onClick={() => {
+                            let loginData = qs.stringify({
+                                email: email,
+                                password: password,
+                            });
+                            let loginConfig = {
+                                method: "post",
+                                url: "/api/login",
+                                headers: {
+                                    "Content-Type":
+                                        "application/x-www-form-urlencoded",
+                                },
+                                data: loginData,
+                            };
+
+                            axios(loginConfig)
+                                .then(function (response) {
+                                    console.log(JSON.stringify(response.data));
+                                    if (response.status === 200) {
+                                        history.push("/notify");
+                                    }
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                    setNoAuth(true);
+                                });
+                        }}
+                    >
+                        login
+                    </button>
                 </div>
             )}
         </>
