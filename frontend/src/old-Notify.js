@@ -67,7 +67,7 @@ function Notify(props) {
                                 .then(function (response) {
                                     console.table(
                                         "discord response data",
-                                        JSON.stringify(response.data),
+                                        JSON.stringify(response.data)
                                     );
                                     let rData = JSON.stringify(response.data);
                                     if (rData === "true") {
