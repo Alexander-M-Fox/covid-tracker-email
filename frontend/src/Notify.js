@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -12,47 +12,161 @@ const qs = require("qs");
 
 function Notify(props) {
     let history = useHistory();
-    const [discord, setDiscord] = useState("enter discord webhook");
 
-    let empty = true;
-    if (discord != "" && discord != "enter discord webhook") {
-        empty = false;
+    const [daily, setDaily] = useState(undefined);
+    let oneOffButtonStyle = daily ? "inactive" : "active";
+    let dailyButtonStyle = daily ? "active" : "inactive";
+    // console.log(`daily = ${daily}`);
+
+    useEffect(() => {
+        oneOffButtonStyle = "";
+    }, []);
+
+    const [email, setEmail] = useState(false);
+    const [discord, setDiscord] = useState(false);
+    let emailButtonStyle = email ? "active" : "inactive";
+    let discordButtonStyle = discord ? "active" : "inactive";
+    // console.log(`email = ${email}`);
+    // console.log(`discord = ${discord}`);
+
+    const [address, setAddress] = useState("enter email address");
+    const [webhook, setWebhook] = useState("enter discord webhook");
+
+    // should UI show question 2?
+    // must be done this way as I can't run an if statement in return jsx
+    let q1Answered = false;
+    if (daily !== undefined) {
+        q1Answered = true;
     }
-    console.table("props.compareList", props.compareList);
 
-    console.log(discord);
+    // const [finished, setFinished] = useState(false);
+    let finished = false;
+
+    // should UI show bottom bar?
+    if (email && discord) {
+        if (
+            address !== "enter email address" &&
+            address !== "" &&
+            webhook !== "enter discord webhook" &&
+            webhook !== ""
+        ) {
+            finished = true;
+        } else {
+            finished = false;
+        }
+    } else if (email && !discord) {
+        if (address !== "enter email address" && address !== "") {
+            finished = true;
+        } else {
+            finished = false;
+        }
+    } else if (discord && !email) {
+        if (webhook !== "enter discord webhook" && webhook !== "") {
+            finished = true;
+        } else {
+            finished = false;
+        }
+    }
 
     return (
         <>
             <div className="containerShort">
                 <div>
                     <p>would you like...</p>
-                    <div class="choiceButtons">
-                        <button>a one off notification</button>
+                    <div className="choiceButtons">
+                        <button
+                            className={oneOffButtonStyle}
+                            onClick={() => {
+                                setDaily(false);
+                            }}
+                        >
+                            a one off notification
+                        </button>
                         <p>or</p>
-                        <button>daily notifications</button>
+                        <button
+                            className={dailyButtonStyle}
+                            onClick={() => {
+                                setDaily(true);
+                            }}
+                        >
+                            daily notifications
+                        </button>
                     </div>
                 </div>
-                {/* <div className="searchBar">
+            </div>
+            {q1Answered && (
+                <div className="containerShort">
+                    <div>
+                        <p>
+                            choose <b>at least one</b> of the following
+                        </p>
+                        <div className="choiceButtons">
+                            <button
+                                className={emailButtonStyle}
+                                onClick={() => {
+                                    email ? setEmail(false) : setEmail(true);
+                                }}
+                            >
+                                send via email
+                            </button>
+                            <p>and / or</p>
+                            <button
+                                className={discordButtonStyle}
+                                onClick={() => {
+                                    discord
+                                        ? setDiscord(false)
+                                        : setDiscord(true);
+                                }}
+                            >
+                                send via discord webhook
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {email && (
+                <div className="containerVeryShort">
                     <input
                         type="text"
-                        placeholder={discord}
+                        placeholder={address}
                         onChange={(e) => {
                             if (e.target.value === "") {
-                                setDiscord("enter discord webhook");
+                                setAddress("enter email address");
                             } else {
-                                setDiscord(e.target.value);
+                                setAddress(e.target.value);
                             }
                         }}
                         onBlur={(e) => {
                             if (e.target.value === "") {
-                                setDiscord("enter discord webhook");
+                                setAddress("enter email address");
                             }
                         }}
                     />
-                </div> */}
-            </div>
-            {!empty && (
+                </div>
+            )}
+            {discord && (
+                <div className="containerVeryShort">
+                    <input
+                        type="text"
+                        placeholder={webhook}
+                        onChange={(e) => {
+                            if (e.target.value === "") {
+                                setWebhook("enter discord webhook");
+                            } else {
+                                setWebhook(e.target.value);
+                            }
+                        }}
+                        onBlur={(e) => {
+                            if (e.target.value === "") {
+                                setWebhook("enter discord webhook");
+                            }
+                        }}
+                    />
+                </div>
+            )}
+            {/* </div> */}
+            {finished && (
                 <div className="bottomBar">
                     <button
                         onClick={async () => {
@@ -79,9 +193,7 @@ function Notify(props) {
                                     );
                                     let rData = JSON.stringify(response.data);
                                     if (rData === "true") {
-                                        {
-                                            history.push("/finish");
-                                        }
+                                        history.push("/finish");
                                     }
                                 })
                                 .catch(function (error) {

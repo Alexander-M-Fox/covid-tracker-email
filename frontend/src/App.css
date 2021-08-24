@@ -14,6 +14,14 @@
     height: 20vh;
 }
 
+.containerVeryShort {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 12vh;
+}
+
 .choiceButtons {
     display: grid;
     grid-template-columns: 3fr 1fr 3fr;
@@ -23,16 +31,16 @@
 
 .choiceButtons button {
     width: 25vw;
-    background-color: #43f094;
     border-radius: 12px;
     box-shadow: 0;
-    border: #43f094;
+    border: 2px solid #43f094;
     font-size: 30px;
     font-weight: bolder;
     color: #002612;
     height: 10vh;
     padding-left: 0.5em;
     padding-right: 0.5em;
+    background-color: white;
 }
 
 .choiceButtons p {
@@ -40,7 +48,7 @@
 }
 
 .choiceButtons button:hover {
-    color: #e3fcee;
+    background-color: #d9fdea;
     transition: all 0.1s ease-in-out;
     -moz-transition: all 0.1s ease-in-out;
     -webkit-transition: all 0.1s ease-in-out;
@@ -48,8 +56,14 @@
     -ms-transition: all 0.1s ease-in-out;
 }
 
-.choiceButtons button:focus {
+/* .choiceButtons button:visited {
     outline: none;
+    background-color: #43f094;
+} */
+
+.choiceButtons button.active {
+    outline: none;
+    background-color: #43f094;
 }
 
 .password {
