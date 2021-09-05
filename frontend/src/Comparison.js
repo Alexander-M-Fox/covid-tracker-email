@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 const axios = require("axios");
 
 function Comparison(props) {
+    let history = useHistory();
+    if (props.compareList.length === 0) {
+        history.push("/");
+    }
     const [covidData, setCovidData] = useState();
 
     useEffect(() => {

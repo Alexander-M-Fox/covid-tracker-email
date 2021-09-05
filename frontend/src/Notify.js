@@ -14,23 +14,41 @@ function Notify(props) {
     let history = useHistory();
 
     const [daily, setDaily] = useState(undefined);
-    let oneOffButtonStyle = daily ? "inactive" : "active";
+
+    // undefined counts as false hence requiring long form
+    let oneOffButtonStyle = "inactive";
+    if (daily) {
+        oneOffButtonStyle = "inactive";
+    } else if (daily === undefined) {
+        oneOffButtonStyle = "inactive";
+    } else {
+        oneOffButtonStyle = "active";
+    }
+
     let dailyButtonStyle = daily ? "active" : "inactive";
     // console.log(`daily = ${daily}`);
 
     useEffect(() => {
         oneOffButtonStyle = "";
+        axios.get("/api/checkAuth").then((res) => {
+            if (res.data !== true) {
+                history.push("/login");
+            }
+        });
     }, []);
 
     const [email, setEmail] = useState(false);
     const [discord, setDiscord] = useState(false);
     let emailButtonStyle = email ? "active" : "inactive";
     let discordButtonStyle = discord ? "active" : "inactive";
-    // console.log(`email = ${email}`);
-    // console.log(`discord = ${discord}`);
 
-    const [address, setAddress] = useState("enter email address");
+    const [error, setError] = useState();
+
     const [webhook, setWebhook] = useState("enter discord webhook");
+
+    if (props.compareList.length === 0) {
+        return history.push("/");
+    }
 
     // should UI show question 2?
     // must be done this way as I can't run an if statement in return jsx
@@ -39,33 +57,15 @@ function Notify(props) {
         q1Answered = true;
     }
 
-    // const [finished, setFinished] = useState(false);
     let finished = false;
 
     // should UI show bottom bar?
-    if (email && discord) {
-        if (
-            address !== "enter email address" &&
-            address !== "" &&
-            webhook !== "enter discord webhook" &&
-            webhook !== ""
-        ) {
-            finished = true;
-        } else {
-            finished = false;
-        }
-    } else if (email && !discord) {
-        if (address !== "enter email address" && address !== "") {
-            finished = true;
-        } else {
-            finished = false;
-        }
-    } else if (discord && !email) {
+    if (discord) {
         if (webhook !== "enter discord webhook" && webhook !== "") {
             finished = true;
-        } else {
-            finished = false;
         }
+    } else if (email) {
+        finished = true;
     }
 
     return (
@@ -127,22 +127,7 @@ function Notify(props) {
 
             {email && (
                 <div className="containerVeryShort">
-                    <input
-                        type="text"
-                        placeholder={address}
-                        onChange={(e) => {
-                            if (e.target.value === "") {
-                                setAddress("enter email address");
-                            } else {
-                                setAddress(e.target.value);
-                            }
-                        }}
-                        onBlur={(e) => {
-                            if (e.target.value === "") {
-                                setAddress("enter email address");
-                            }
-                        }}
-                    />
+                    <h4>we'll use the email address you signed in with</h4>
                 </div>
             )}
             {discord && (
@@ -165,35 +150,45 @@ function Notify(props) {
                     />
                 </div>
             )}
+            <div className="containerError">
+                <p>{error}</p>
+            </div>
             {/* </div> */}
             {finished && (
                 <div className="bottomBar">
                     <button
                         onClick={async () => {
                             // TODO: frontend validation
-                            let data = qs.stringify({
-                                discord: discord,
+                            let data = {
+                                discord: webhook,
                                 countries: props.compareList,
-                            });
+                                sendEmails: email,
+                            };
                             let config = {
                                 method: "post",
-                                url: "/api/discord",
+                                url: "/api/notify",
                                 headers: {
-                                    "Content-Type":
-                                        "application/x-www-form-urlencoded",
+                                    "Content-Type": "application/json",
                                 },
                                 data: data,
                             };
 
                             axios(config)
                                 .then(function (response) {
-                                    console.table(
-                                        "discord response data",
-                                        JSON.stringify(response.data),
-                                    );
-                                    let rData = JSON.stringify(response.data);
+                                    let rData = String(response.data);
+                                    console.log(`rData = ${rData}`);
                                     if (rData === "true") {
                                         history.push("/finish");
+                                    } else if (
+                                        rData === "No countries selected"
+                                    ) {
+                                        history.push("/");
+                                        console.log("no countries");
+                                    } else if (rData === "no auth") {
+                                        history.push("/login");
+                                    } else {
+                                        console.log("set error running");
+                                        setError(rData);
                                     }
                                 })
                                 .catch(function (error) {

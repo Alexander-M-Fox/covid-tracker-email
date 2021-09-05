@@ -18,7 +18,7 @@ function SelectCountry(props) {
                     addCountry={props.addCountry}
                     compareList={props.compareList}
                     key={index}
-                />
+                />,
             );
         });
     } else {
@@ -42,6 +42,15 @@ function SelectCountry(props) {
                         onBlur={(e) => {
                             if (e.target.value === "") {
                                 setSearch("enter country");
+                            }
+                        }}
+                        onClick={(e) => {
+                            if (
+                                e.target.value !== "" &&
+                                e.target.value !== "enter country"
+                            ) {
+                                e.target.value = "";
+                                setSearch("");
                             }
                         }}
                     />

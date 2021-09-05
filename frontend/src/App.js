@@ -55,7 +55,11 @@ function App() {
         <Router>
             <Switch>
                 <Route exact path="/">
-                    <p>TODO NEXT: sort emails</p>
+                    <p>
+                        TODO NEXT: update backend /api/notify pool.query to run
+                        regardless of discord setting, but take discord setting
+                        into account
+                    </p>
                     <div className="vertFlex">
                         <SelectCountry
                             countries={countries}

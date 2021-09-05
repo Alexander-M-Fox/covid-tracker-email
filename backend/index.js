@@ -63,7 +63,7 @@ function blockNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    //res.redirect("/");
+    res.send("no auth");
 }
 
 // OAuth2 Config
@@ -133,6 +133,13 @@ let addCommas = (intIn) => {
 app.get("/", (req, res) => {
     // react build's index.html will replace this
     res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.get("/api/checkAuth", (req, res) => {
+    if (req.isAuthenticated()) {
+        return res.send("true");
+    }
+    return res.send("false");
 });
 
 //#region
@@ -361,103 +368,126 @@ app.get("/api/email", (req, res) => {
  * @param {string} [outputs] false - Sent if discord message was NOT sent successfully.
  */
 //#endregion
-app.post("/api/discord", async (req, res) => {
+app.post("/api/notify", blockNotAuthenticated, async (req, res) => {
     // TODO: Input santitation
+    if (req.body.countries.length === 0) {
+        return res.send("No countries selected");
+    }
 
     // last updated
     let epoch = covidRead[0].updated;
     let d = new Date(epoch);
     let lastUpdated = `${d.toLocaleDateString()} at ${d.toLocaleTimeString()}`;
 
-    let fields = [
-        {
-            name: "Last Updated:",
-            value: lastUpdated,
-        },
-    ];
+    // if user selected discord
+    console.log(`req.body.discord = ${req.body.discord}`);
+    if (
+        req.body.discord !== undefined &&
+        req.body.discord !== "enter discord webhook"
+    ) {
+        let regex = "^https://discord.com/api/webhooks/";
+        let webhookSanitation = new RegExp(regex);
+        if (!webhookSanitation.test(req.body.discord)) {
+            return res.send("Webhook link invalid");
+        }
 
-    let targetURL = req.body.discord;
-    for (country in req.body.countries) {
-        fields.push(
+        let fields = [
             {
-                name: "Country name",
-                value: "=======",
+                name: "Last Updated:",
+                value: lastUpdated,
             },
-            {
-                name: "`New Cases`",
-                value: "todayCases",
-                inline: true,
-            },
-            {
-                name: "`New Deaths`",
-                value: "todayDeaths",
-                inline: true,
-            },
-        );
-        for (countryObj in covidRead) {
-            if (
-                req.body.countries[country].name ===
-                covidRead[countryObj].country.toLowerCase()
-            ) {
-                // country name
-                fields[country * 3 + 1].name = covidRead[countryObj].country;
-                // new cases
-                fields[country * 3 + 2].value = addCommas(
-                    covidRead[countryObj].todayCases,
-                );
-                // new deaths
-                fields[country * 3 + 3].value = addCommas(
-                    covidRead[countryObj].todayDeaths,
-                );
+        ];
+
+        let targetURL = req.body.discord;
+
+        for (country in req.body.countries) {
+            fields.push(
+                {
+                    name: "`Country name`",
+                    value: "=======",
+                },
+                {
+                    name: "New Cases",
+                    value: "todayCases",
+                    inline: true,
+                },
+                {
+                    name: "New Deaths",
+                    value: "todayDeaths",
+                    inline: true,
+                },
+            );
+            for (countryObj in covidRead) {
+                if (
+                    req.body.countries[country].name ===
+                    covidRead[countryObj].country.toLowerCase()
+                ) {
+                    // country name
+                    fields[
+                        country * 3 + 1
+                    ].name = `\`${covidRead[countryObj].country}\``;
+                    // new cases
+                    fields[country * 3 + 2].value = addCommas(
+                        covidRead[countryObj].todayCases,
+                    );
+                    // new deaths
+                    fields[country * 3 + 3].value = addCommas(
+                        covidRead[countryObj].todayDeaths,
+                    );
+                }
             }
         }
-    }
-    let discordData = JSON.stringify({
-        username: "Covid Tracker",
-        avatar_url: "https://i.imgur.com/ByNoBIl.png",
-        embeds: [
-            {
-                title: "Daily Covid Update",
-                url: "https://disease.sh/docs/",
-                description:
-                    "Figures may vary slightly from your county's official portal.",
-                color: 2533597,
-                fields: fields,
-                thumbnail: {
-                    url: "https://upload.wikimedia.org/wikipedia/commons/3/38/4-Nature-Wallpapers-2014-1_ukaavUI.jpg",
+        let discordData = JSON.stringify({
+            username: "Covid Tracker",
+            avatar_url: "https://i.imgur.com/ByNoBIl.png",
+            embeds: [
+                {
+                    title: "Daily Covid Update",
+                    url: "https://disease.sh/docs/",
+                    description:
+                        "Figures may vary slightly from your county's official portal.",
+                    color: 2533597,
+                    fields: fields,
+                    footer: {
+                        text: "Data sourced from https://disease.sh/docs/ (click title to follow link)",
+                        icon_url:
+                            "https://copyright.co.uk/images/copyright-symbol.png",
+                    },
                 },
-                image: {
-                    url: "https://upload.wikimedia.org/wikipedia/commons/5/5a/A_picture_from_China_every_day_108.jpg",
-                },
-                footer: {
-                    text: "Data sourced from https://disease.sh/docs/ (click title to follow link)",
-                    icon_url:
-                        "https://copyright.co.uk/images/copyright-symbol.png",
-                },
-            },
-        ],
-    });
-
-    let discordConfig = {
-        method: "post",
-        url: targetURL,
-        headers: {
-            "Content-Type": "application/json",
-        },
-        data: discordData,
-    };
-
-    axios(discordConfig)
-        .then(function (response) {
-            console.log(JSON.stringify(response.data));
-            res.send("true");
-        })
-        .catch(function (error) {
-            console.log(error);
-            res.send("false");
+            ],
         });
 
-    // res.json(req.body);
+        let discordConfig = {
+            method: "post",
+            url: targetURL,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: discordData,
+        };
+
+        axios(discordConfig)
+            .then(function (response) {
+                res.send("true");
+            })
+            .catch(function (error) {
+                console.log(error);
+                res.send("false");
+            });
+    } else {
+        pool.query(
+            `UPDATE account_tbl
+	SET send_emails=$1
+	WHERE acc_id=$2;`,
+            [req.body.sendEmails, req.user.acc_id],
+            (err, results) => {
+                if (err) {
+                    throw err;
+                }
+                res.send("true");
+            },
+        );
+    }
 });
 
 //#region
