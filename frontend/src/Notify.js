@@ -47,7 +47,7 @@ function Notify(props) {
     const [webhook, setWebhook] = useState("enter discord webhook");
 
     if (props.compareList.length === 0) {
-        return history.push("/");
+        history.push("/");
     }
 
     // should UI show question 2?
@@ -163,6 +163,7 @@ function Notify(props) {
                                 discord: webhook,
                                 countries: props.compareList,
                                 sendEmails: email,
+                                daily: daily,
                             };
                             let config = {
                                 method: "post",
