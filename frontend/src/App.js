@@ -5,6 +5,7 @@ import Comparison from "./Comparison";
 import Login from "./Login";
 import Notify from "./Notify";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import CreateAccount from "./CreateAccount";
 
 function App() {
     // a list of countries to be sent to users email, NOT a list of emails.
@@ -78,6 +79,9 @@ function App() {
                 </Route>
                 <Route path="/compare">
                     <Comparison compareList={compareList} />
+                </Route>
+                <Route path="/createAccount">
+                    <CreateAccount compareList={compareList} />
                 </Route>
                 <Route path="/login">
                     <Login compareList={compareList} />

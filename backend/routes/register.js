@@ -21,12 +21,13 @@ const { pool } = require("../dbConfig");
  */
 //#endregion
 router.post("/register", blockAuthenticated, async (req, res) => {
-    let { email, password, password2, acc_name, send_emails } = req.body;
+    let { email, password, password2, acc_name } = req.body;
+    let send_emails = false;
     let acc_id = uuidv4();
 
     let errors = [];
 
-    if (!email || !password || !password2 || !acc_name || !send_emails) {
+    if (!email || !password || !password2 || !acc_name) {
         errors.push({
             msg: "1 or more fields left empty",
         });

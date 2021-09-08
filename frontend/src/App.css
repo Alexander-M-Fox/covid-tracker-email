@@ -6,6 +6,14 @@
     height: 45vh;
 }
 
+.containerMedium {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 35vh;
+}
+
 .containerShort {
     display: flex;
     flex-direction: column;
