@@ -20,6 +20,7 @@ function CreateAccount() {
     const [confPassword, setConfPassword] = useState("confirm password");
     //const [displayCreateAccount, setDisplayCreateAccount] = useState(false);
     const [accError, setAccError] = useState(false);
+    const [accErrorDetails, setAccErrorDetails] = useState("");
 
     let confPasswordStyle = {};
 
@@ -63,6 +64,10 @@ function CreateAccount() {
             })
             .catch(function (error) {
                 console.log(error);
+                setAccErrorDetails(JSON.stringify(error.message));
+                console.log(
+                    `typeof accErrorDetails = ${typeof accErrorDetails}`,
+                );
                 setAccError(true);
             });
     };
@@ -172,7 +177,8 @@ function CreateAccount() {
             </div>
             {accError && (
                 <div className="containerError">
-                    <p>something went wrong creating your account</p>
+                    {/* <p>something went wrong creating your account</p> */}
+                    <p>{accErrorDetails}</p>
                 </div>
             )}
             {displayCreateAccount && (

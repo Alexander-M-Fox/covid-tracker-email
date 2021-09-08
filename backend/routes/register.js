@@ -66,7 +66,7 @@ router.post("/register", blockAuthenticated, async (req, res) => {
                     errors.push({
                         msg: "Email already registered",
                     });
-                    return res.send({
+                    return res.send(400, {
                         success: false,
                         errors: errors,
                     });
