@@ -3,12 +3,11 @@ const router = express.Router();
 const axios = require("axios").default;
 const { pool } = require("../dbConfig");
 require("dotenv").config();
-const { blockNotAuthenticated, covidRead } = require("../commonFunctions");
-
-// add commas to numbers to enhance readability.
-let addCommas = (intIn) => {
-    return intIn.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
+const {
+    blockNotAuthenticated,
+    covidRead,
+    postDiscordWebhook,
+} = require("../commonFunctions");
 
 //#region
 /**
@@ -31,8 +30,6 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
     let lastUpdated = `${d.toLocaleDateString()} at ${d.toLocaleTimeString()}`;
 
     let promises = [];
-
-    console.log(req.user.acc_id);
 
     // if user selected discord
     if (
@@ -81,85 +78,16 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
                 };
         }
 
-        let fields = [
-            {
-                name: "Last Updated:",
-                value: lastUpdated,
-            },
-        ];
-
-        let targetURL = req.body.discord;
-
-        for (country in req.body.countries) {
-            fields.push(
-                {
-                    name: "`Country name`",
-                    value: "=======",
-                },
-                {
-                    name: "New Cases",
-                    value: "todayCases",
-                    inline: true,
-                },
-                {
-                    name: "New Deaths",
-                    value: "todayDeaths",
-                    inline: true,
-                },
-            );
-            for (countryObj in covidRead) {
-                if (
-                    req.body.countries[country].name ===
-                    covidRead[countryObj].country.toLowerCase()
-                ) {
-                    // country name
-                    fields[
-                        country * 3 + 1
-                    ].name = `\`${covidRead[countryObj].country}\``;
-                    // new cases
-                    fields[country * 3 + 2].value = addCommas(
-                        covidRead[countryObj].todayCases,
-                    );
-                    // new deaths
-                    fields[country * 3 + 3].value = addCommas(
-                        covidRead[countryObj].todayDeaths,
-                    );
-                }
-            }
-        }
-        let discordData = JSON.stringify({
-            username: "Covid Tracker",
-            avatar_url: "https://i.imgur.com/ByNoBIl.png",
-            embeds: [
-                {
-                    title: "Daily Covid Update",
-                    url: "https://disease.sh/docs/",
-                    description:
-                        "Figures may vary slightly from your county's official portal.",
-                    color: 2533597,
-                    fields: fields,
-                    footer: {
-                        text: "Data sourced from https://disease.sh/docs/ (click title to follow link)",
-                        icon_url:
-                            "https://copyright.co.uk/images/copyright-symbol.png",
-                    },
-                },
-            ],
-        });
-
-        let discordConfig = {
-            method: "post",
-            url: targetURL,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            data: discordData,
-        };
-
-        const discordQuery = axios(discordConfig);
-
-        promises.push(discordQuery);
+        promises.push(
+            postDiscordWebhook(
+                req.body.discord,
+                lastUpdated,
+                req.body.countries,
+            ),
+        );
     }
+
+    // update db entry
     let dailyEmails = false;
     if (req.body.sendEmails && req.body.daily) {
         dailyEmails = true;

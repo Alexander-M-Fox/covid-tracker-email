@@ -4,6 +4,7 @@ import SelectCountry from "./SelectCountry";
 import Comparison from "./Comparison";
 import Login from "./Login";
 import Notify from "./Notify";
+import Done from "./Done";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import CreateAccount from "./CreateAccount";
 
@@ -90,7 +91,7 @@ function App() {
                     <Notify compareList={compareList} />
                 </Route>
                 <Route path="/finish">
-                    <p>done</p>
+                    <Done />
                 </Route>
             </Switch>
         </Router>
