@@ -24,11 +24,6 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
         return res.send("No countries selected");
     }
 
-    // last updated
-    let epoch = covidRead[0].updated;
-    let d = new Date(epoch);
-    let lastUpdated = `${d.toLocaleDateString()} at ${d.toLocaleTimeString()}`;
-
     let promises = [];
 
     // if user selected discord
@@ -78,13 +73,7 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
                 };
         }
 
-        promises.push(
-            postDiscordWebhook(
-                req.body.discord,
-                lastUpdated,
-                req.body.countries,
-            ),
-        );
+        promises.push(postDiscordWebhook(req.body.discord, req.body.countries));
     }
 
     // update db entry

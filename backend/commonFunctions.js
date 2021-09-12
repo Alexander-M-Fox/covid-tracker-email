@@ -34,7 +34,12 @@ let addCommas = (intIn) => {
     return intIn.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const postDiscordWebhook = async (targetURL, lastUpdated, countries) => {
+const postDiscordWebhook = async (targetURL, countries) => {
+    // last updated
+    let epoch = covidRead[0].updated;
+    let d = new Date(epoch);
+    let lastUpdated = `${d.toLocaleDateString()} at ${d.toLocaleTimeString()}`;
+
     let fields = [
         {
             name: "Last Updated:",
