@@ -11,6 +11,14 @@
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run-script", "dev"],
             "port": 5000
+        },
+        {
+            "name": "Nodemon Attach",
+            "type": "node",
+            "request": "attach",
+            "processId": "${command:PickProcess}",
+            "restart": true,
+            "protocol": "inspector"
         }
     ]
 }
