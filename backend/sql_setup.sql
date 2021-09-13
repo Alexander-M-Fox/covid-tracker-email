@@ -18,6 +18,14 @@ CREATE DATABASE "covid-tracker-email"
     ENCODING = 'UTF8'
     CONNECTION LIMIT = -1;
 
+/*
+STOP.  Exit shell and enter new db as new user using: 
+psql -U username -h 127.0.0.1 database
+for example:
+psql -U covid-tracker-user -h 127.0.0.1 covid-tracker-email 
+
+Then comment above, uncomment below and rerun script. 
+
 -- create account_tbl
 
 CREATE TABLE public.account_tbl
