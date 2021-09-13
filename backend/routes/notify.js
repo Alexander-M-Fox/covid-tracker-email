@@ -19,6 +19,9 @@ const {
  */
 //#endregion
 router.post("/notify", blockNotAuthenticated, async (req, res) => {
+    const userID = req.user.acc_id;
+    const discord = req.body.discord;
+
     // TODO: Input santitation
     if (req.body.countries.length === 0) {
         return res.send("No countries selected");
@@ -27,14 +30,11 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
     let promises = [];
 
     // if user selected discord
-    if (
-        req.body.discord !== undefined &&
-        req.body.discord !== "enter discord webhook"
-    ) {
+    if (discord !== undefined && discord !== "enter discord webhook") {
         // sanitation
         let regex = "^https://discord.com/api/webhooks/";
         let webhookSanitation = new RegExp(regex);
-        if (!webhookSanitation.test(req.body.discord)) {
+        if (!webhookSanitation.test(discord)) {
             console.log("sanitation invalid");
             return res.send("Webhook link invalid");
         }
@@ -44,10 +44,10 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
             pool.query(
                 `SELECT webhook_url, acc_id
 	            FROM webhook_tbl
-	            WHERE acc_id=$1
-                AND webhook_url=$2;`,
+	            WHERE acc_id='$1' 
+                AND webhook_url='$2';`,
             ),
-                [req.user.acc_id, req.body.discord],
+                [userID, discord],
                 (err, results) => {
                     if (err) {
                         console.log("error selecting webhook table");
@@ -58,9 +58,9 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
                     } else {
                         pool.query(
                             `INSERT INTO webhook_tbl(
-	                        webhook_url, acc_id)
-	                        VALUES ($1, $2);`,
-                            [req.body.discord, req.user.acc_id],
+                            webhook_url, acc_id)
+                            VALUES ($1, $2);`,
+                            [discord, userID],
                             (err, results) => {
                                 if (err) {
                                     console.log("error adding webhook to db");
@@ -73,7 +73,7 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
                 };
         }
 
-        promises.push(postDiscordWebhook(req.body.discord, req.body.countries));
+        promises.push(postDiscordWebhook(discord, req.body.countries));
     }
 
     // update db entry
@@ -83,9 +83,9 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
     }
     const accQuery = pool.query(
         `UPDATE account_tbl
-	SET send_emails=$1
-	WHERE acc_id=$2;`,
-        [dailyEmails, req.user.acc_id],
+    SET send_emails=$1
+    WHERE acc_id=$2;`,
+        [dailyEmails, userID],
     );
     promises.push(accQuery);
 

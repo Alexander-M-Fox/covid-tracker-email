@@ -58,9 +58,7 @@ function App() {
             <Switch>
                 <Route exact path="/">
                     <p>
-                        TODO NEXT: update backend /api/notify pool.query to run
-                        regardless of discord setting, but take discord setting
-                        into account
+                        TODO NEXT: line 69 backend/routes/notify.js is never running, nor is the db query
                     </p>
                     <div className="vertFlex">
                         <SelectCountry
