@@ -40,6 +40,7 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
         }
 
         if (req.body.daily) {
+            console.log(`req.body.daily = ${req.body.daily}`);
             // add webhook to db
             pool.query(
                 `SELECT webhook_url, acc_id
@@ -53,15 +54,20 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
                         console.log("error selecting webhook table");
                         throw error;
                     }
+                    console.log(
+                        `select statement results.rows.length = ${results.rows.length}`,
+                    );
                     if (results.rows.length > 0) {
                         console.log("webhook already in db");
                     } else {
+                        console.log(`insert query about to run`);
                         pool.query(
                             `INSERT INTO webhook_tbl(
                             webhook_url, acc_id)
                             VALUES ($1, $2);`,
                             [discord, userID],
                             (err, results) => {
+                                console.log(`insert statement callback start`);
                                 if (err) {
                                     console.log("error adding webhook to db");
                                     throw err;
