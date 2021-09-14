@@ -40,34 +40,26 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
         }
 
         if (req.body.daily) {
-            console.log(`req.body.daily = ${req.body.daily}`);
             // add webhook to db
             pool.query(
                 `SELECT webhook_url, acc_id
 	            FROM webhook_tbl
-	            WHERE acc_id='$1' 
-                AND webhook_url='$2';`,
-            ),
+	            WHERE acc_id=$1 
+                AND webhook_url=$2;`,
                 [userID, discord],
                 (err, results) => {
                     if (err) {
-                        console.log("error selecting webhook table");
-                        throw error;
+                        throw err;
                     }
-                    console.log(
-                        `select statement results.rows.length = ${results.rows.length}`,
-                    );
                     if (results.rows.length > 0) {
                         console.log("webhook already in db");
                     } else {
-                        console.log(`insert query about to run`);
                         pool.query(
                             `INSERT INTO webhook_tbl(
                             webhook_url, acc_id)
                             VALUES ($1, $2);`,
                             [discord, userID],
                             (err, results) => {
-                                console.log(`insert statement callback start`);
                                 if (err) {
                                     console.log("error adding webhook to db");
                                     throw err;
@@ -76,7 +68,8 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
                             },
                         );
                     }
-                };
+                },
+            );
         }
 
         promises.push(postDiscordWebhook(discord, req.body.countries));
