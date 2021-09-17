@@ -8,15 +8,20 @@ Ongoing project to simplify comparing and keeping track of COVID 19 statistics f
 
 -   Pick what countries stats interest you
 -   Compare recent COVID statistics displayed neatly on one page
+-   Send statistics to discord webhook
 
 ## To Be Developed
 
--   Subscribe to get emails on covid statistics (work in progress)
+-   Subscribe to get emails on covid statistics
+-   Optional daily discord notifications
 
 ## Technologies
 
-React JS Frontend
-Node.js Express Backend
+**PERN Stack**
+
+React JS Frontend,
+Node.js Express Backend,
+PostgreSQL Database
 
 ## API
 
