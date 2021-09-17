@@ -59,6 +59,9 @@ app.use("/api", require("./routes/email"));
 app.use("/api", require("./routes/login"));
 app.use("/api", require("./routes/countries"));
 app.use("/api", require("./routes/notify"));
+app.use("/api", require("./routes/fetchSettings"));
+
+// temp, must be deleted before production
 app.use("/admin", require("./routes/admin/createCountryList"));
 app.use("/admin", require("./routes/admin/update"));
 

@@ -10,7 +10,7 @@ import {
 const axios = require("axios");
 const qs = require("qs");
 
-function Notify({ update, compareList }) {
+function Notify({ compareList }) {
     let history = useHistory();
 
     const [daily, setDaily] = useState(undefined);
@@ -26,17 +26,34 @@ function Notify({ update, compareList }) {
     }
 
     let dailyButtonStyle = daily ? "active" : "inactive";
-    // console.log(`daily = ${daily}`);
 
     useEffect(() => {
-        oneOffButtonStyle = "";
-        axios.get("/api/checkAuth").then((res) => {
-            if (res.data !== true) {
-                history.push("/login");
-            } else if (update === true) {
-                console.log("update is true");
+        // nested function to surpress react async warning
+        const setup = async () => {
+            oneOffButtonStyle = "";
+            const auth = await axios.get("/api/checkAuth");
+            if (auth.data !== true) {
+                return history.push("/login");
             }
-        });
+
+            // fetch user settings if present in DB and update page state accordingly
+            const fetchSettings = await axios.get("/api/fetchSettings");
+            console.log(fetchSettings.data);
+            if (fetchSettings.data) {
+                setUpdate(true);
+            }
+            if (fetchSettings.data.webhook) {
+                setDiscord(true);
+                setWebhook(fetchSettings.data.webhookData);
+            }
+            if (fetchSettings.data.sendEmails) {
+                setEmail(true);
+                setDaily(true);
+                q1Answered = true;
+                console.log(`q1Answered = ${q1Answered}`);
+            }
+        };
+        setup();
     }, []);
 
     const [email, setEmail] = useState(false);
@@ -45,7 +62,7 @@ function Notify({ update, compareList }) {
     let discordButtonStyle = discord ? "active" : "inactive";
 
     const [error, setError] = useState();
-
+    const [update, setUpdate] = useState(false);
     const [webhook, setWebhook] = useState("enter discord webhook");
 
     if (compareList.length === 0) {
@@ -150,6 +167,12 @@ function Notify({ update, compareList }) {
                         onBlur={(e) => {
                             if (e.target.value === "") {
                                 setWebhook("enter discord webhook");
+                            }
+                        }}
+                        onClick={(e) => {
+                            let regex = "^https://discord.com/api/webhooks/";
+                            let webhookSanitation = new RegExp(regex);
+                            if (webhookSanitation.test(webhook)) {
                             }
                         }}
                     />

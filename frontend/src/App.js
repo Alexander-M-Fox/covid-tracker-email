@@ -12,13 +12,6 @@ function App() {
     // a list of countries to be sent to users email, NOT a list of emails.
     const [compareList, setCompareList] = useState([]);
 
-    // when true /notify will call db for current settings before rendering.
-    const [updateSettings, setUpdateSettings] = useState(false);
-
-    const setUpdate = (boolIn) => {
-        setUpdateSettings(boolIn);
-    };
-
     const countriesJson = require("./countries.json");
 
     let objectToArray = (objectIn) => {
@@ -65,8 +58,8 @@ function App() {
             <Switch>
                 <Route exact path="/">
                     <p>
-                        TODO NEXT: done.js's broken "setUpdate" and replace with
-                        useeffect db call on mount at ALL /notify requests
+                        TODO NEXT: separate the update page from the notify page
+                        for improved encapsulation and potential UI changes
                     </p>
                     <div className="vertFlex">
                         <SelectCountry
@@ -94,14 +87,10 @@ function App() {
                     <Login compareList={compareList} />
                 </Route>
                 <Route path="/notify">
-                    <Notify
-                        compareList={compareList}
-                        update={updateSettings}
-                        // setUpdate={setUpdate}
-                    />
+                    <Notify compareList={compareList} />
                 </Route>
                 <Route path="/finish">
-                    <Done setUpdate={setUpdate} />
+                    <Done />
                 </Route>
             </Switch>
         </Router>

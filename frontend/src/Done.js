@@ -2,7 +2,7 @@ import { React, useEffect } from "react";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 const axios = require("axios");
 
-function Done({ setUpdate }) {
+function Done() {
     let history = useHistory();
 
     useEffect(() => {
@@ -22,10 +22,6 @@ function Done({ setUpdate }) {
                         <p></p>
                         <button
                             onClick={() => {
-                                console.log(
-                                    `typeof setupdate = ${typeof setUpdate}`,
-                                );
-                                setUpdate(true);
                                 history.push("/notify");
                             }}
                         >
