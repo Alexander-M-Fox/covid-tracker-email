@@ -2,10 +2,10 @@ import { buildQueries } from "@testing-library/dom";
 import React, { useState } from "react";
 import "./App.css";
 
-function Country(props) {
+function Country({ country, compareList, addCountry }) {
     let thisStyle = {};
-    for (let c in props.compareList) {
-        if (props.compareList[c].name === props.country) {
+    for (let c in compareList) {
+        if (compareList[c].name === country) {
             thisStyle = {
                 backgroundColor: "#43f094",
             };
@@ -15,13 +15,13 @@ function Country(props) {
     return (
         <div className="country" style={thisStyle}>
             <div className="cName">
-                <p>{props.country}</p>
+                <p>{country}</p>
             </div>
             <div className="addButton">
                 <button
                     className="buttonFlex"
                     onClick={() => {
-                        props.addCountry(props.country);
+                        addCountry(country);
                     }}
                 >
                     <span className="plus">&#43;</span>

@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import "./App.css";
 import Country from "./Country";
 
-function SelectCountry(props) {
+function SelectCountry({ countries, addCountry, compareList }) {
     const [search, setSearch] = useState("enter country");
 
-    let filteredCountries = props.countries.filter((slookfor) => {
+    let filteredCountries = countries.filter((slookfor) => {
         return slookfor.includes(search.toLowerCase());
     });
 
@@ -15,8 +15,8 @@ function SelectCountry(props) {
             return filtList.push(
                 <Country
                     country={country}
-                    addCountry={props.addCountry}
-                    compareList={props.compareList}
+                    addCountry={addCountry}
+                    compareList={compareList}
                     key={index}
                 />,
             );

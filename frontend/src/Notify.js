@@ -10,7 +10,7 @@ import {
 const axios = require("axios");
 const qs = require("qs");
 
-function Notify(props) {
+function Notify({ update, compareList }) {
     let history = useHistory();
 
     const [daily, setDaily] = useState(undefined);
@@ -33,6 +33,8 @@ function Notify(props) {
         axios.get("/api/checkAuth").then((res) => {
             if (res.data !== true) {
                 history.push("/login");
+            } else if (update === true) {
+                console.log("update is true");
             }
         });
     }, []);
@@ -46,7 +48,7 @@ function Notify(props) {
 
     const [webhook, setWebhook] = useState("enter discord webhook");
 
-    if (props.compareList.length === 0) {
+    if (compareList.length === 0) {
         history.push("/");
     }
 
@@ -68,11 +70,14 @@ function Notify(props) {
         finished = true;
     }
 
+    // set subtitle msg dependant on update
+    let subtitle = update ? "update your settings here" : "would you like...";
+
     return (
         <>
             <div className="containerShort">
                 <div>
-                    <p>would you like...</p>
+                    <p>{subtitle}</p>
                     <div className="choiceButtons">
                         <button
                             className={oneOffButtonStyle}
@@ -161,7 +166,7 @@ function Notify(props) {
                             // TODO: frontend validation
                             let data = {
                                 discord: webhook,
-                                countries: props.compareList,
+                                countries: compareList,
                                 sendEmails: email,
                                 daily: daily,
                             };

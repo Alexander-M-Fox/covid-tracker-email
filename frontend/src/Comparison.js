@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 const axios = require("axios");
 
-function Comparison(props) {
+function Comparison({ compareList }) {
     let history = useHistory();
-    if (props.compareList.length === 0) {
+    if (compareList.length === 0) {
         history.push("/");
     }
     const [covidData, setCovidData] = useState();
 
     useEffect(() => {
-        axios.post("/api/covid/countries", props.compareList).then((res) => {
+        axios.post("/api/covid/countries", compareList).then((res) => {
             console.table("response of /api/covid/countries post request", res);
             setCovidData(res.data);
         });
