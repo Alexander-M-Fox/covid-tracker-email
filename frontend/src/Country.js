@@ -1,4 +1,3 @@
-import { buildQueries } from "@testing-library/dom";
 import React, { useState } from "react";
 import "./App.css";
 
