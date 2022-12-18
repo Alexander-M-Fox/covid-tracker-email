@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
-const axios = require("axios");
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+const axios = require('axios');
 
 function Comparison({ compareList }) {
   let history = useHistory();
   if (compareList.length === 0) {
-    history.push("/");
+    history.push('/');
   }
   const [covidData, setCovidData] = useState();
 
   useEffect(() => {
-    axios.post("/api/covid/countries", compareList).then((res) => {
-      console.table("response of /api/covid/countries post request", res);
+    axios.post('/api/covid/countries', compareList).then((res) => {
+      console.table('response of /api/covid/countries post request', res);
       setCovidData(res.data);
     });
   }, []); // [] = when 'nothing' changes --> only run on first render (aka onMount)
 
   let addCommas = (intIn) => {
-    return intIn.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return intIn.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
   return (
