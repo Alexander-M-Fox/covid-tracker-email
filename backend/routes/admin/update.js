@@ -1,19 +1,20 @@
 const express = require('express');
+
 const router = express.Router();
 const path = require('path');
 const axios = require('axios').default;
 const fs = require('fs');
-const CronJob = require('cron').CronJob;
+const { CronJob } = require('cron');
 require('dotenv').config();
 
-//#region
+// #region
 /**
  * @param {string} description - Admin route to manually force server's covid data to update itself with disease.sh's API
  * @param {string} [inputs] N/A - None.
  * @param {string} [outputs] success - If false see msg.
  * @param {string} [outputs] msg - Describes handling of request.
  */
-//#endregion
+// #endregion
 router.get(
   '/update',
   (updateData = (req, res) => {

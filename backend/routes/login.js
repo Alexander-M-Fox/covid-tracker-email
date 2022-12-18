@@ -1,8 +1,9 @@
 const express = require('express');
+
 const router = express.Router();
+const passport = require('passport');
 const { blockAuthenticated } = require('../commonFunctions');
 const { pool } = require('../dbConfig');
-const passport = require('passport');
 
 router.post(
   '/login',
@@ -27,7 +28,7 @@ router.post(
         res.send({
           success: true,
           msg: 'logged in',
-          email: results.rows[0]['email'],
+          email: results.rows[0].email,
         });
       }
     );

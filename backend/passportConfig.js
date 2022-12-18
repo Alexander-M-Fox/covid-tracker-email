@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
-const { pool } = require('./dbConfig');
 const bcrypt = require('bcrypt');
+const { pool } = require('./dbConfig');
 
 function initialize(passport) {
   const authenticateUser = (email, password, done) => {
@@ -23,12 +23,11 @@ function initialize(passport) {
             }
             if (isMatch) {
               return done(null, user); // creates session cookie
-            } else {
-              //password is incorrect
-              return done(null, false, {
-                message: 'Password is incorrect',
-              });
             }
+            // password is incorrect
+            return done(null, false, {
+              message: 'Password is incorrect',
+            });
           });
         } else {
           // No user

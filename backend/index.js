@@ -5,10 +5,10 @@ const moment = require('moment');
 const axios = require('axios').default;
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const CronJob = require('cron').CronJob;
-const { pool } = require('./dbConfig');
+const { CronJob } = require('cron');
 const passport = require('passport');
 const session = require('express-session');
+const { pool } = require('./dbConfig');
 require('dotenv').config();
 const initializePassport = require('./passportConfig');
 const {

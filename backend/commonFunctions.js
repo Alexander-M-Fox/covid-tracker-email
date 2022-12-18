@@ -18,7 +18,7 @@ function blockNotAuthenticated(req, res, next) {
   res.send('no auth');
 }
 
-let readJson = (path) => {
+const readJson = (path) => {
   try {
     return fs.readFileSync(path, 'utf8');
   } catch (err) {
@@ -27,20 +27,20 @@ let readJson = (path) => {
   }
 };
 
-let covidRead = JSON.parse(readJson(path.join(__dirname, 'covidData.json')));
+const covidRead = JSON.parse(readJson(path.join(__dirname, 'covidData.json')));
 
 // add commas to numbers to enhance readability.
-let addCommas = (intIn) => {
+const addCommas = (intIn) => {
   return intIn.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 const postDiscordWebhook = async (targetURL, countries) => {
   // last updated
-  let epoch = covidRead[0].updated;
-  let d = new Date(epoch);
-  let lastUpdated = `${d.toLocaleDateString()} at ${d.toLocaleTimeString()}`;
+  const epoch = covidRead[0].updated;
+  const d = new Date(epoch);
+  const lastUpdated = `${d.toLocaleDateString()} at ${d.toLocaleTimeString()}`;
 
-  let fields = [
+  const fields = [
     {
       name: 'Last Updated:',
       value: lastUpdated,
@@ -81,7 +81,7 @@ const postDiscordWebhook = async (targetURL, countries) => {
       }
     }
   }
-  let discordData = JSON.stringify({
+  const discordData = JSON.stringify({
     username: 'Covid Tracker',
     avatar_url: 'https://i.imgur.com/ByNoBIl.png',
     embeds: [
@@ -91,7 +91,7 @@ const postDiscordWebhook = async (targetURL, countries) => {
         description:
           "Figures may vary slightly from your county's official portal.",
         color: 2533597,
-        fields: fields,
+        fields,
         footer: {
           text: 'Data sourced from https://disease.sh/docs/ (click title to follow link)',
           icon_url: 'https://copyright.co.uk/images/copyright-symbol.png',
@@ -100,7 +100,7 @@ const postDiscordWebhook = async (targetURL, countries) => {
     ],
   });
 
-  let discordConfig = {
+  const discordConfig = {
     method: 'post',
     url: targetURL,
     headers: {

@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const axios = require('axios').default;
 const { pool } = require('../dbConfig');
@@ -9,7 +10,7 @@ const {
   postDiscordWebhook,
 } = require('../commonFunctions');
 
-//#region
+// #region
 /**
  * @param {string} description - Server sends custom discord message containing data on user's selected countries.
  * @param {string} [inputs] discord - Discord webhook URL for the server to send message to.
@@ -17,23 +18,23 @@ const {
  * @param {string} [outputs] true - Sent if discord message was sent successfully.
  * @param {string} [outputs] false - Sent if discord message was NOT sent successfully.
  */
-//#endregion
+// #endregion
 router.post('/notify', blockNotAuthenticated, async (req, res) => {
   const userID = req.user.acc_id;
-  const discord = req.body.discord;
+  const { discord } = req.body;
 
   // TODO: Input santitation
   if (req.body.countries.length === 0) {
     return res.send('No countries selected');
   }
 
-  let promises = [];
+  const promises = [];
 
   // if user selected discord
   if (discord !== undefined && discord !== 'enter discord webhook') {
     // sanitation
-    let regex = '^https://discord.com/api/webhooks/';
-    let webhookSanitation = new RegExp(regex);
+    const regex = '^https://discord.com/api/webhooks/';
+    const webhookSanitation = new RegExp(regex);
     if (!webhookSanitation.test(discord)) {
       console.log('sanitation invalid');
       return res.send('Webhook link invalid');

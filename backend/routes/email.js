@@ -1,8 +1,10 @@
 const express = require('express');
+
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
-const OAuth2 = google.auth.OAuth2;
+
+const { OAuth2 } = google.auth;
 
 // OAuth2 Config
 const OAuth2_client = new OAuth2(
@@ -22,7 +24,7 @@ const sendMail = (recipient, html) => {
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
       refreshToken: process.env.REFRESH_TOKEN,
-      accessToken: accessToken,
+      accessToken,
     },
   });
 
@@ -30,7 +32,7 @@ const sendMail = (recipient, html) => {
     from: `Covid Tracker Email <${process.env.USER}>`,
     to: recipient,
     subject: 'Daily Covid Stats Update',
-    html: html,
+    html,
   };
 
   transport.sendMail(mail_options, (err, result) => {
@@ -44,7 +46,7 @@ const sendMail = (recipient, html) => {
 };
 
 router.get('/email', (req, res) => {
-  let thisHtml = `
+  const thisHtml = `
     <!DOCTYPE html>
     <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">

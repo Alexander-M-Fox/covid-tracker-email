@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const axios = require('axios').default;
 const { pool } = require('../dbConfig');
@@ -9,7 +10,7 @@ const {
   postDiscordWebhook,
 } = require('../commonFunctions');
 
-//#region
+// #region
 /**
  * @param {string} description - Server sends custom discord message containing data on user's selected countries.
  * @param {string} [inputs] discord - Discord webhook URL for the server to send message to.
@@ -17,11 +18,11 @@ const {
  * @param {string} [outputs] true - Sent if discord message was sent successfully.
  * @param {string} [outputs] false - Sent if discord message was NOT sent successfully.
  */
-//#endregion
+// #endregion
 router.get('/fetchSettings', blockNotAuthenticated, async (req, res) => {
   const userID = req.user.acc_id;
 
-  let promises = [];
+  const promises = [];
 
   // see if user already has webhook
   const webhookQuery = pool.query(
@@ -42,7 +43,7 @@ router.get('/fetchSettings', blockNotAuthenticated, async (req, res) => {
 
   promises.push(accountQuery);
 
-  let returnData = {};
+  const returnData = {};
 
   try {
     // used var so responses can be accessed outside try catch

@@ -1,17 +1,18 @@
 const express = require('express');
+
 const router = express.Router();
 const { covidRead } = require('../../commonFunctions');
 
-//#region
+// #region
 /**
  * @param {string} description - Admin route to create a list of countries with no data attached to be used with frontend country search suggestions.  THis list is created as a local file on the server, NOT sent back to the frontend.
  * @param {string} [inputs] N/A - None.
  * @param {string} [outputs] success - If false see msg.
  * @param {string} [outputs] msg - Describes handling of request.
  */
-//#endregion
+// #endregion
 router.get('/createCountryList', (req, res) => {
-  let countries = [];
+  const countries = [];
 
   for (let i = 0; i < covidRead.length; i++) {
     countries.push({
