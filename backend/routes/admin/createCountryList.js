@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { covidRead } = require("../../commonFunctions");
+const { covidRead } = require('../../commonFunctions');
 
 //#region
 /**
@@ -10,7 +10,7 @@ const { covidRead } = require("../../commonFunctions");
  * @param {string} [outputs] msg - Describes handling of request.
  */
 //#endregion
-router.get("/createCountryList", (req, res) => {
+router.get('/createCountryList', (req, res) => {
   let countries = [];
 
   for (let i = 0; i < covidRead.length; i++) {
@@ -25,13 +25,13 @@ router.get("/createCountryList", (req, res) => {
 
   try {
     fs.writeFileSync(
-      path.join(__dirname, "countries.json"),
+      path.join(__dirname, 'countries.json'),
       JSON.stringify(countries)
     );
-    res.json({ msg: "Covid data updated", success: "true" });
+    res.json({ msg: 'Covid data updated', success: 'true' });
   } catch (err) {
     console.error(err);
-    res.json({ msg: "Error writing covid data", success: "false" });
+    res.json({ msg: 'Error writing covid data', success: 'false' });
   }
 });
 

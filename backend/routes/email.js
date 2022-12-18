@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
+const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
 const OAuth2 = google.auth.OAuth2;
 
 // OAuth2 Config
@@ -15,9 +15,9 @@ const sendMail = (recipient, html) => {
   const accessToken = OAuth2_client.getAccessToken();
 
   const transport = nodemailer.createTransport({
-    service: "gmail",
+    service: 'gmail',
     auth: {
-      type: "OAuth2",
+      type: 'OAuth2',
       user: process.env.USER,
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
@@ -29,7 +29,7 @@ const sendMail = (recipient, html) => {
   const mail_options = {
     from: `Covid Tracker Email <${process.env.USER}>`,
     to: recipient,
-    subject: "Daily Covid Stats Update",
+    subject: 'Daily Covid Stats Update',
     html: html,
   };
 
@@ -37,13 +37,13 @@ const sendMail = (recipient, html) => {
     if (err) {
       console.error(err);
     } else {
-      console.log("mail sent");
+      console.log('mail sent');
     }
     transport.close();
   });
 };
 
-router.get("/email", (req, res) => {
+router.get('/email', (req, res) => {
   let thisHtml = `
     <!DOCTYPE html>
     <head>
@@ -58,9 +58,9 @@ router.get("/email", (req, res) => {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
     </html>
     `;
-  sendMail("petepom224@697av.com", thisHtml);
+  sendMail('petepom224@697av.com', thisHtml);
 
-  res.send("ok");
+  res.send('ok');
 });
 
 module.exports = router;

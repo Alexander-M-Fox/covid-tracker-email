@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { covidRead } = require("../commonFunctions");
+const { covidRead } = require('../commonFunctions');
 
 //#region
 /**
@@ -9,7 +9,7 @@ const { covidRead } = require("../commonFunctions");
  * @param {string} [outputs] resCovidData - JSON array of objects [ { country1_covid_data }, { country2_covid_data } ]
  */
 //#endregion
-router.post("/covid/countries", (req, res) => {
+router.post('/covid/countries', (req, res) => {
   let resCovidData = new Array();
 
   for (let k = 0; k < req.body.length; k++) {
