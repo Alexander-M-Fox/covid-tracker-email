@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-const axios = require("axios");
-const qs = require("qs");
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+const axios = require('axios');
+const qs = require('qs');
 
 function CreateAccount() {
   let history = useHistory();
 
   useEffect(() => {
-    axios.get("/api/checkAuth").then((res) => {
+    axios.get('/api/checkAuth').then((res) => {
       if (res.data === true) {
-        history.push("/notify");
+        history.push('/notify');
       }
     });
   }, []);
 
-  const [accName, setAccName] = useState("your name");
-  const [email, setEmail] = useState("email");
-  const [password, setPassword] = useState("password");
-  const [confPassword, setConfPassword] = useState("confirm password");
+  const [accName, setAccName] = useState('your name');
+  const [email, setEmail] = useState('email');
+  const [password, setPassword] = useState('password');
+  const [confPassword, setConfPassword] = useState('confirm password');
   //const [displayCreateAccount, setDisplayCreateAccount] = useState(false);
   const [accError, setAccError] = useState(false);
-  const [accErrorDetails, setAccErrorDetails] = useState("");
+  const [accErrorDetails, setAccErrorDetails] = useState('');
 
   let confPasswordStyle = {};
 
   if (confPassword === password) {
     confPasswordStyle = {
-      color: "#0f0",
+      color: '#0f0',
     };
-  } else if (confPassword !== "confirm password" && confPassword !== password) {
+  } else if (confPassword !== 'confirm password' && confPassword !== password) {
     confPasswordStyle = {
-      color: "#f00",
+      color: '#f00',
     };
   } else {
     confPasswordStyle = {};
@@ -44,10 +44,10 @@ function CreateAccount() {
       password2: confPassword,
     });
     let createAccountConfig = {
-      method: "post",
-      url: "/api/register",
+      method: 'post',
+      url: '/api/register',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       data: createAccountData,
     };
@@ -56,7 +56,7 @@ function CreateAccount() {
       .then(function (response) {
         console.log(JSON.stringify(response.data));
         if (response.status === 200) {
-          history.push("/notify");
+          history.push('/notify');
         }
       })
       .catch(function (error) {
@@ -83,15 +83,15 @@ function CreateAccount() {
             type="text"
             placeholder={accName}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setAccName("your name");
+              if (e.target.value === '') {
+                setAccName('your name');
               } else {
                 setAccName(e.target.value);
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
-                setEmail("email");
+              if (e.target.value === '') {
+                setEmail('email');
               }
             }}
           />
@@ -103,15 +103,15 @@ function CreateAccount() {
             type="text"
             placeholder={email}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setEmail("email");
+              if (e.target.value === '') {
+                setEmail('email');
               } else {
                 setEmail(e.target.value);
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
-                setEmail("email");
+              if (e.target.value === '') {
+                setEmail('email');
               }
             }}
           />
@@ -123,15 +123,15 @@ function CreateAccount() {
             type="password"
             placeholder={password}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setPassword("password");
+              if (e.target.value === '') {
+                setPassword('password');
               } else {
                 setPassword(e.target.value);
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
-                setPassword("password");
+              if (e.target.value === '') {
+                setPassword('password');
               }
             }}
           />
@@ -144,19 +144,19 @@ function CreateAccount() {
             type="password"
             placeholder={confPassword}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setConfPassword("confirm password");
+              if (e.target.value === '') {
+                setConfPassword('confirm password');
               } else {
                 setConfPassword(e.target.value);
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
-                setConfPassword("confirm password");
+              if (e.target.value === '') {
+                setConfPassword('confirm password');
               }
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (e.key === 'Enter') {
                 if (displayCreateAccount) {
                   sendCreateAccountRequest();
                 }

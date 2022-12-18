@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import "./App.css";
-import Country from "./Country";
+import React, { useState } from 'react';
+import './App.css';
+import Country from './Country';
 
 function SelectCountry({ countries, addCountry, compareList }) {
-  const [search, setSearch] = useState("enter country");
+  const [search, setSearch] = useState('enter country');
 
   let filteredCountries = countries.filter((slookfor) => {
     return slookfor.includes(search.toLowerCase());
@@ -22,7 +22,7 @@ function SelectCountry({ countries, addCountry, compareList }) {
       );
     });
   } else {
-    filtList = "";
+    filtList = '';
   }
 
   return (
@@ -33,21 +33,21 @@ function SelectCountry({ countries, addCountry, compareList }) {
             type="text"
             placeholder={search}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setSearch("enter country");
+              if (e.target.value === '') {
+                setSearch('enter country');
               } else {
                 setSearch(e.target.value);
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
-                setSearch("enter country");
+              if (e.target.value === '') {
+                setSearch('enter country');
               }
             }}
             onClick={(e) => {
-              if (e.target.value !== "" && e.target.value !== "enter country") {
-                e.target.value = "";
-                setSearch("");
+              if (e.target.value !== '' && e.target.value !== 'enter country') {
+                e.target.value = '';
+                setSearch('');
               }
             }}
           />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,19 +6,19 @@ import {
   Link,
   Redirect,
   useHistory,
-} from "react-router-dom";
-const axios = require("axios");
-const qs = require("qs");
+} from 'react-router-dom';
+const axios = require('axios');
+const qs = require('qs');
 
 function Notify(props) {
   let history = useHistory();
-  const [discord, setDiscord] = useState("enter discord webhook");
+  const [discord, setDiscord] = useState('enter discord webhook');
 
   let empty = true;
-  if (discord != "" && discord != "enter discord webhook") {
+  if (discord != '' && discord != 'enter discord webhook') {
     empty = false;
   }
-  console.table("props.compareList", props.compareList);
+  console.table('props.compareList', props.compareList);
 
   console.log(discord);
 
@@ -30,15 +30,15 @@ function Notify(props) {
             type="text"
             placeholder={discord}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setDiscord("enter discord webhook");
+              if (e.target.value === '') {
+                setDiscord('enter discord webhook');
               } else {
                 setDiscord(e.target.value);
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
-                setDiscord("enter discord webhook");
+              if (e.target.value === '') {
+                setDiscord('enter discord webhook');
               }
             }}
           />
@@ -54,10 +54,10 @@ function Notify(props) {
                 countries: props.compareList,
               });
               let config = {
-                method: "post",
-                url: "/api/discord",
+                method: 'post',
+                url: '/api/discord',
                 headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
+                  'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 data: data,
               };
@@ -65,13 +65,13 @@ function Notify(props) {
               axios(config)
                 .then(function (response) {
                   console.table(
-                    "discord response data",
+                    'discord response data',
                     JSON.stringify(response.data)
                   );
                   let rData = JSON.stringify(response.data);
-                  if (rData === "true") {
+                  if (rData === 'true') {
                     {
-                      history.push("/finish");
+                      history.push('/finish');
                     }
                   }
                 })

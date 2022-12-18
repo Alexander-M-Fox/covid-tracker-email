@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import "./App.css";
-import SelectCountry from "./SelectCountry";
-import Comparison from "./Comparison";
-import Login from "./Login";
-import Notify from "./Notify";
-import Done from "./Done";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import CreateAccount from "./CreateAccount";
+import React, { useState } from 'react';
+import './App.css';
+import SelectCountry from './SelectCountry';
+import Comparison from './Comparison';
+import Login from './Login';
+import Notify from './Notify';
+import Done from './Done';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import CreateAccount from './CreateAccount';
 
 function App() {
   // a list of countries to be sent to users email, NOT a list of emails.
   const [compareList, setCompareList] = useState([]);
 
-  const countriesJson = require("./countries.json");
+  const countriesJson = require('./countries.json');
 
   let objectToArray = (objectIn) => {
     let outArray = [];

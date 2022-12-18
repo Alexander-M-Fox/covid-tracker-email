@@ -1,14 +1,14 @@
-import { React, useEffect } from "react";
-import { BrowserRouter as Router, useHistory } from "react-router-dom";
-const axios = require("axios");
+import { React, useEffect } from 'react';
+import { BrowserRouter as Router, useHistory } from 'react-router-dom';
+const axios = require('axios');
 
 function Done() {
   let history = useHistory();
 
   useEffect(() => {
-    axios.get("/api/checkAuth").then((res) => {
+    axios.get('/api/checkAuth').then((res) => {
       if (res.data !== true) {
-        history.push("/login");
+        history.push('/login');
       }
     });
   }, []);
@@ -22,7 +22,7 @@ function Done() {
             <p></p>
             <button
               onClick={() => {
-                history.push("/notify");
+                history.push('/notify');
               }}
             >
               change settings

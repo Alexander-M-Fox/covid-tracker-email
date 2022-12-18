@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, { useState } from 'react';
+import './App.css';
 
 function Country({ country, compareList, addCountry }) {
   let thisStyle = {};
   for (let c in compareList) {
     if (compareList[c].name === country) {
       thisStyle = {
-        backgroundColor: "#43f094",
+        backgroundColor: '#43f094',
       };
     }
   }

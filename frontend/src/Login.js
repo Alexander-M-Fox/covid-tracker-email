@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-const axios = require("axios");
-const qs = require("qs");
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+const axios = require('axios');
+const qs = require('qs');
 
 function Login() {
   let history = useHistory();
 
   useEffect(() => {
-    axios.get("/api/checkAuth").then((res) => {
+    axios.get('/api/checkAuth').then((res) => {
       if (res.data === true) {
-        history.push("/notify");
+        history.push('/notify');
       }
     });
   }, []);
 
-  const [email, setEmail] = useState("email");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState('email');
+  const [password, setPassword] = useState('password');
   const [displayLogin, setDisplayLogin] = useState(false);
   const [noAuth, setNoAuth] = useState(false);
 
@@ -25,10 +25,10 @@ function Login() {
       password: password,
     });
     let loginConfig = {
-      method: "post",
-      url: "/api/login",
+      method: 'post',
+      url: '/api/login',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       data: loginData,
     };
@@ -37,7 +37,7 @@ function Login() {
       .then(function (response) {
         console.log(JSON.stringify(response.data));
         if (response.status === 200) {
-          history.push("/notify");
+          history.push('/notify');
         }
       })
       .catch(function (error) {
@@ -54,15 +54,15 @@ function Login() {
             type="text"
             placeholder={email}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setEmail("email");
+              if (e.target.value === '') {
+                setEmail('email');
               } else {
                 setEmail(e.target.value);
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
-                setEmail("email");
+              if (e.target.value === '') {
+                setEmail('email');
               }
             }}
           />
@@ -74,8 +74,8 @@ function Login() {
             type="password"
             placeholder={password}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setPassword("password");
+              if (e.target.value === '') {
+                setPassword('password');
                 setDisplayLogin(false);
               } else {
                 setDisplayLogin(true);
@@ -83,13 +83,13 @@ function Login() {
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
+              if (e.target.value === '') {
                 setDisplayLogin(false);
-                setPassword("password");
+                setPassword('password');
               }
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (e.key === 'Enter') {
                 if (displayLogin) {
                   sendLoginRequest();
                 }

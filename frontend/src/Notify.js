@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,9 +6,9 @@ import {
   Link,
   Redirect,
   useHistory,
-} from "react-router-dom";
-const axios = require("axios");
-const qs = require("qs");
+} from 'react-router-dom';
+const axios = require('axios');
+const qs = require('qs');
 
 function Notify({ compareList }) {
   let history = useHistory();
@@ -16,28 +16,28 @@ function Notify({ compareList }) {
   const [daily, setDaily] = useState(undefined);
 
   // undefined counts as false hence requiring long form
-  let oneOffButtonStyle = "inactive";
+  let oneOffButtonStyle = 'inactive';
   if (daily) {
-    oneOffButtonStyle = "inactive";
+    oneOffButtonStyle = 'inactive';
   } else if (daily === undefined) {
-    oneOffButtonStyle = "inactive";
+    oneOffButtonStyle = 'inactive';
   } else {
-    oneOffButtonStyle = "active";
+    oneOffButtonStyle = 'active';
   }
 
-  let dailyButtonStyle = daily ? "active" : "inactive";
+  let dailyButtonStyle = daily ? 'active' : 'inactive';
 
   useEffect(() => {
     // nested function to surpress react async warning
     const setup = async () => {
-      oneOffButtonStyle = "";
-      const auth = await axios.get("/api/checkAuth");
+      oneOffButtonStyle = '';
+      const auth = await axios.get('/api/checkAuth');
       if (auth.data !== true) {
-        return history.push("/login");
+        return history.push('/login');
       }
 
       // fetch user settings if present in DB and update page state accordingly
-      const fetchSettings = await axios.get("/api/fetchSettings");
+      const fetchSettings = await axios.get('/api/fetchSettings');
       console.log(fetchSettings.data);
       if (fetchSettings.data) {
         setUpdate(true);
@@ -58,15 +58,15 @@ function Notify({ compareList }) {
 
   const [email, setEmail] = useState(false);
   const [discord, setDiscord] = useState(false);
-  let emailButtonStyle = email ? "active" : "inactive";
-  let discordButtonStyle = discord ? "active" : "inactive";
+  let emailButtonStyle = email ? 'active' : 'inactive';
+  let discordButtonStyle = discord ? 'active' : 'inactive';
 
   const [error, setError] = useState();
   const [update, setUpdate] = useState(false);
-  const [webhook, setWebhook] = useState("enter discord webhook");
+  const [webhook, setWebhook] = useState('enter discord webhook');
 
   if (compareList.length === 0) {
-    history.push("/");
+    history.push('/');
   }
 
   // should UI show question 2?
@@ -80,7 +80,7 @@ function Notify({ compareList }) {
 
   // should UI show bottom bar?
   if (discord) {
-    if (webhook !== "enter discord webhook" && webhook !== "") {
+    if (webhook !== 'enter discord webhook' && webhook !== '') {
       finished = true;
     }
   } else if (email) {
@@ -88,7 +88,7 @@ function Notify({ compareList }) {
   }
 
   // set subtitle msg dependant on update
-  let subtitle = update ? "update your settings here" : "would you like...";
+  let subtitle = update ? 'update your settings here' : 'would you like...';
 
   return (
     <>
@@ -156,19 +156,19 @@ function Notify({ compareList }) {
             type="text"
             placeholder={webhook}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setWebhook("enter discord webhook");
+              if (e.target.value === '') {
+                setWebhook('enter discord webhook');
               } else {
                 setWebhook(e.target.value);
               }
             }}
             onBlur={(e) => {
-              if (e.target.value === "") {
-                setWebhook("enter discord webhook");
+              if (e.target.value === '') {
+                setWebhook('enter discord webhook');
               }
             }}
             onClick={(e) => {
-              let regex = "^https://discord.com/api/webhooks/";
+              let regex = '^https://discord.com/api/webhooks/';
               let webhookSanitation = new RegExp(regex);
               if (webhookSanitation.test(webhook)) {
               }
@@ -192,10 +192,10 @@ function Notify({ compareList }) {
                 daily: daily,
               };
               let config = {
-                method: "post",
-                url: "/api/notify",
+                method: 'post',
+                url: '/api/notify',
                 headers: {
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                 },
                 data: data,
               };
@@ -204,15 +204,15 @@ function Notify({ compareList }) {
                 .then(function (response) {
                   let rData = String(response.data);
                   console.log(`rData = ${rData}`);
-                  if (rData === "true") {
-                    history.push("/finish");
-                  } else if (rData === "No countries selected") {
-                    history.push("/");
-                    console.log("no countries");
-                  } else if (rData === "no auth") {
-                    history.push("/login");
+                  if (rData === 'true') {
+                    history.push('/finish');
+                  } else if (rData === 'No countries selected') {
+                    history.push('/');
+                    console.log('no countries');
+                  } else if (rData === 'no auth') {
+                    history.push('/login');
                   } else {
-                    console.log("set error running");
+                    console.log('set error running');
                     setError(rData);
                   }
                 })
