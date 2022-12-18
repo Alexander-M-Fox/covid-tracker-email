@@ -54,13 +54,13 @@ function CreateAccount() {
     };
 
     axios(createAccountConfig)
-      .then(function (response) {
+      .then((response) => {
         console.log(JSON.stringify(response.data));
         if (response.status === 200) {
           history.push('/notify');
         }
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
         setAccErrorDetails(JSON.stringify(error.message));
         console.log(`typeof accErrorDetails = ${typeof accErrorDetails}`);
@@ -180,6 +180,7 @@ function CreateAccount() {
       {displayCreateAccount && (
         <div className="bottomBar">
           <button
+            type="button"
             onClick={() => {
               sendCreateAccountRequest();
             }}
