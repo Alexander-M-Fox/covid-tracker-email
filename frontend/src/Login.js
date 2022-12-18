@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+
 const axios = require('axios');
 const qs = require('qs');
 
 function Login() {
-  let history = useHistory();
+  const history = useHistory();
 
   useEffect(() => {
     axios.get('/api/checkAuth').then((res) => {
@@ -20,11 +21,11 @@ function Login() {
   const [noAuth, setNoAuth] = useState(false);
 
   const sendLoginRequest = () => {
-    let loginData = qs.stringify({
-      email: email,
-      password: password,
+    const loginData = qs.stringify({
+      email,
+      password,
     });
-    let loginConfig = {
+    const loginConfig = {
       method: 'post',
       url: '/api/login',
       headers: {

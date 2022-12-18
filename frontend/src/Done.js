@@ -1,9 +1,10 @@
 import { React, useEffect } from 'react';
 import { BrowserRouter as Router, useHistory } from 'react-router-dom';
+
 const axios = require('axios');
 
 function Done() {
-  let history = useHistory();
+  const history = useHistory();
 
   useEffect(() => {
     axios.get('/api/checkAuth').then((res) => {
@@ -19,7 +20,7 @@ function Done() {
         <div>
           <div className="choiceButtons">
             <button onClick={() => {}}>logout</button>
-            <p></p>
+            <p />
             <button
               onClick={() => {
                 history.push('/notify');

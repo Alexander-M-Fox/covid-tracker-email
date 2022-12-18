@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import SelectCountry from './SelectCountry';
 import Comparison from './Comparison';
 import Login from './Login';
 import Notify from './Notify';
 import Done from './Done';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import CreateAccount from './CreateAccount';
 
 function App() {
@@ -14,8 +14,8 @@ function App() {
 
   const countriesJson = require('./countries.json');
 
-  let objectToArray = (objectIn) => {
-    let outArray = [];
+  const objectToArray = (objectIn) => {
+    const outArray = [];
     for (let i = 0; i < objectIn.length; i++) {
       outArray.push(objectIn[i].name.toLowerCase());
     }
@@ -25,7 +25,7 @@ function App() {
   const countries = objectToArray(countriesJson);
 
   // called from Country.js's addButton onClick
-  let addCountry = (country) => {
+  const addCountry = (country) => {
     // search if country already added to emailList
     let foundFlag = false;
     for (let i = 0; i < compareList.length; i++) {
@@ -45,9 +45,9 @@ function App() {
     displayNext = true;
   }
 
-  let displaySelectedCountries = () => {
-    let selectedCountries = [];
-    for (let c in compareList) {
+  const displaySelectedCountries = () => {
+    const selectedCountries = [];
+    for (const c in compareList) {
       selectedCountries.push(<p key={c}>{compareList[c].name}</p>);
     }
     return selectedCountries;

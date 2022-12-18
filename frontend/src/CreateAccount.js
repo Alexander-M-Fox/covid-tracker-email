@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+
 const axios = require('axios');
 const qs = require('qs');
 
 function CreateAccount() {
-  let history = useHistory();
+  const history = useHistory();
 
   useEffect(() => {
     axios.get('/api/checkAuth').then((res) => {
@@ -18,7 +19,7 @@ function CreateAccount() {
   const [email, setEmail] = useState('email');
   const [password, setPassword] = useState('password');
   const [confPassword, setConfPassword] = useState('confirm password');
-  //const [displayCreateAccount, setDisplayCreateAccount] = useState(false);
+  // const [displayCreateAccount, setDisplayCreateAccount] = useState(false);
   const [accError, setAccError] = useState(false);
   const [accErrorDetails, setAccErrorDetails] = useState('');
 
@@ -37,13 +38,13 @@ function CreateAccount() {
   }
 
   const sendCreateAccountRequest = () => {
-    let createAccountData = qs.stringify({
+    const createAccountData = qs.stringify({
       acc_name: accName,
-      email: email,
-      password: password,
+      email,
+      password,
       password2: confPassword,
     });
-    let createAccountConfig = {
+    const createAccountConfig = {
       method: 'post',
       url: '/api/register',
       headers: {

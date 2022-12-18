@@ -7,11 +7,12 @@ import {
   Redirect,
   useHistory,
 } from 'react-router-dom';
+
 const axios = require('axios');
 const qs = require('qs');
 
 function Notify(props) {
-  let history = useHistory();
+  const history = useHistory();
   const [discord, setDiscord] = useState('enter discord webhook');
 
   let empty = true;
@@ -49,17 +50,17 @@ function Notify(props) {
           <button
             onClick={async () => {
               // TODO: frontend validation
-              let data = qs.stringify({
-                discord: discord,
+              const data = qs.stringify({
+                discord,
                 countries: props.compareList,
               });
-              let config = {
+              const config = {
                 method: 'post',
                 url: '/api/discord',
                 headers: {
                   'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                data: data,
+                data,
               };
 
               axios(config)
@@ -68,7 +69,7 @@ function Notify(props) {
                     'discord response data',
                     JSON.stringify(response.data)
                   );
-                  let rData = JSON.stringify(response.data);
+                  const rData = JSON.stringify(response.data);
                   if (rData === 'true') {
                     {
                       history.push('/finish');

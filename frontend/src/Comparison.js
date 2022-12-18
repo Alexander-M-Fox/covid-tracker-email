@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+
 const axios = require('axios');
 
 function Comparison({ compareList }) {
-  let history = useHistory();
+  const history = useHistory();
   if (compareList.length === 0) {
     history.push('/');
   }
@@ -16,7 +17,7 @@ function Comparison({ compareList }) {
     });
   }, []); // [] = when 'nothing' changes --> only run on first render (aka onMount)
 
-  let addCommas = (intIn) => {
+  const addCommas = (intIn) => {
     return intIn.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 

@@ -3,7 +3,7 @@ import './App.css';
 
 function Country({ country, compareList, addCountry }) {
   let thisStyle = {};
-  for (let c in compareList) {
+  for (const c in compareList) {
     if (compareList[c].name === country) {
       thisStyle = {
         backgroundColor: '#43f094',

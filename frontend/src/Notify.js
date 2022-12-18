@@ -7,11 +7,12 @@ import {
   Redirect,
   useHistory,
 } from 'react-router-dom';
+
 const axios = require('axios');
 const qs = require('qs');
 
 function Notify({ compareList }) {
-  let history = useHistory();
+  const history = useHistory();
 
   const [daily, setDaily] = useState(undefined);
 
@@ -25,7 +26,7 @@ function Notify({ compareList }) {
     oneOffButtonStyle = 'active';
   }
 
-  let dailyButtonStyle = daily ? 'active' : 'inactive';
+  const dailyButtonStyle = daily ? 'active' : 'inactive';
 
   useEffect(() => {
     // nested function to surpress react async warning
@@ -58,8 +59,8 @@ function Notify({ compareList }) {
 
   const [email, setEmail] = useState(false);
   const [discord, setDiscord] = useState(false);
-  let emailButtonStyle = email ? 'active' : 'inactive';
-  let discordButtonStyle = discord ? 'active' : 'inactive';
+  const emailButtonStyle = email ? 'active' : 'inactive';
+  const discordButtonStyle = discord ? 'active' : 'inactive';
 
   const [error, setError] = useState();
   const [update, setUpdate] = useState(false);
@@ -88,7 +89,7 @@ function Notify({ compareList }) {
   }
 
   // set subtitle msg dependant on update
-  let subtitle = update ? 'update your settings here' : 'would you like...';
+  const subtitle = update ? 'update your settings here' : 'would you like...';
 
   return (
     <>
@@ -168,8 +169,8 @@ function Notify({ compareList }) {
               }
             }}
             onClick={(e) => {
-              let regex = '^https://discord.com/api/webhooks/';
-              let webhookSanitation = new RegExp(regex);
+              const regex = '^https://discord.com/api/webhooks/';
+              const webhookSanitation = new RegExp(regex);
               if (webhookSanitation.test(webhook)) {
               }
             }}
@@ -185,24 +186,24 @@ function Notify({ compareList }) {
           <button
             onClick={async () => {
               // TODO: frontend validation
-              let data = {
+              const data = {
                 discord: webhook,
                 countries: compareList,
                 sendEmails: email,
-                daily: daily,
+                daily,
               };
-              let config = {
+              const config = {
                 method: 'post',
                 url: '/api/notify',
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                data: data,
+                data,
               };
 
               axios(config)
                 .then(function (response) {
-                  let rData = String(response.data);
+                  const rData = String(response.data);
                   console.log(`rData = ${rData}`);
                   if (rData === 'true') {
                     history.push('/finish');

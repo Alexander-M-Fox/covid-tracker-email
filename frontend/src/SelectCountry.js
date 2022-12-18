@@ -5,7 +5,7 @@ import Country from './Country';
 function SelectCountry({ countries, addCountry, compareList }) {
   const [search, setSearch] = useState('enter country');
 
-  let filteredCountries = countries.filter((slookfor) => {
+  const filteredCountries = countries.filter((slookfor) => {
     return slookfor.includes(search.toLowerCase());
   });
 
