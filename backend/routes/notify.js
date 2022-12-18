@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const axios = require("axios").default;
-const { pool } = require("../dbConfig");
-require("dotenv").config();
+const axios = require('axios').default;
+const { pool } = require('../dbConfig');
+require('dotenv').config();
 const {
   blockNotAuthenticated,
   covidRead,
   postDiscordWebhook,
-} = require("../commonFunctions");
+} = require('../commonFunctions');
 
 //#region
 /**
@@ -18,25 +18,25 @@ const {
  * @param {string} [outputs] false - Sent if discord message was NOT sent successfully.
  */
 //#endregion
-router.post("/notify", blockNotAuthenticated, async (req, res) => {
+router.post('/notify', blockNotAuthenticated, async (req, res) => {
   const userID = req.user.acc_id;
   const discord = req.body.discord;
 
   // TODO: Input santitation
   if (req.body.countries.length === 0) {
-    return res.send("No countries selected");
+    return res.send('No countries selected');
   }
 
   let promises = [];
 
   // if user selected discord
-  if (discord !== undefined && discord !== "enter discord webhook") {
+  if (discord !== undefined && discord !== 'enter discord webhook') {
     // sanitation
-    let regex = "^https://discord.com/api/webhooks/";
+    let regex = '^https://discord.com/api/webhooks/';
     let webhookSanitation = new RegExp(regex);
     if (!webhookSanitation.test(discord)) {
-      console.log("sanitation invalid");
-      return res.send("Webhook link invalid");
+      console.log('sanitation invalid');
+      return res.send('Webhook link invalid');
     }
 
     if (req.body.daily) {
@@ -52,7 +52,7 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
             throw err;
           }
           if (results.rows.length > 0) {
-            console.log("webhook already in db");
+            console.log('webhook already in db');
           } else {
             pool.query(
               `INSERT INTO webhook_tbl(
@@ -61,10 +61,10 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
               [discord, userID],
               (err, results) => {
                 if (err) {
-                  console.log("error adding webhook to db");
+                  console.log('error adding webhook to db');
                   throw err;
                 }
-                console.log("webhook added to db");
+                console.log('webhook added to db');
               }
             );
           }
@@ -90,10 +90,10 @@ router.post("/notify", blockNotAuthenticated, async (req, res) => {
 
   try {
     const responses = await Promise.all(promises);
-    res.send("true");
+    res.send('true');
   } catch (error) {
     console.error(error);
-    res.send("something went wrong");
+    res.send('something went wrong');
   }
 });
 

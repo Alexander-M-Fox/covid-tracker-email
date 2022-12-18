@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { blockAuthenticated } = require("../commonFunctions");
-const { pool } = require("../dbConfig");
-const passport = require("passport");
+const { blockAuthenticated } = require('../commonFunctions');
+const { pool } = require('../dbConfig');
+const passport = require('passport');
 
 router.post(
-  "/login",
+  '/login',
   blockAuthenticated,
-  passport.authenticate("local"),
+  passport.authenticate('local'),
   async (req, res) => {
     pool.query(
       `SELECT email
@@ -21,13 +21,13 @@ router.post(
         if (results.rows.length == 0) {
           return res.send({
             success: false,
-            msg: "login worked, but cant find userID for that email",
+            msg: 'login worked, but cant find userID for that email',
           });
         }
         res.send({
           success: true,
-          msg: "logged in",
-          email: results.rows[0]["email"],
+          msg: 'logged in',
+          email: results.rows[0]['email'],
         });
       }
     );

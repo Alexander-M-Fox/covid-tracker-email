@@ -1,12 +1,12 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 const {
   blockAuthenticated,
   blockNotAuthenticated,
-} = require("../commonFunctions");
-const uuidv4 = require("uuid").v4;
-const bcrypt = require("bcrypt");
-const { pool } = require("../dbConfig");
+} = require('../commonFunctions');
+const uuidv4 = require('uuid').v4;
+const bcrypt = require('bcrypt');
+const { pool } = require('../dbConfig');
 
 //#region
 /**
@@ -20,7 +20,7 @@ const { pool } = require("../dbConfig");
  * @param {string} [outputs] msg - Message describing handling of request.
  */
 //#endregion
-router.post("/register", blockAuthenticated, async (req, res) => {
+router.post('/register', blockAuthenticated, async (req, res) => {
   let { email, password, password2, acc_name } = req.body;
   let send_emails = false;
   let acc_id = uuidv4();
@@ -29,19 +29,19 @@ router.post("/register", blockAuthenticated, async (req, res) => {
 
   if (!email || !password || !password2 || !acc_name) {
     errors.push({
-      msg: "1 or more fields left empty",
+      msg: '1 or more fields left empty',
     });
   }
 
   if (password.length < 8) {
     errors.push({
-      msg: "Password should be at least 8 characters",
+      msg: 'Password should be at least 8 characters',
     });
   }
 
   if (password != password2) {
     errors.push({
-      msg: "Passwords do not match",
+      msg: 'Passwords do not match',
     });
   }
 
@@ -64,7 +64,7 @@ router.post("/register", blockAuthenticated, async (req, res) => {
         if (results.rows.length > 0) {
           // user already registered
           errors.push({
-            msg: "Email already registered",
+            msg: 'Email already registered',
           });
           return res.send(400, {
             success: false,

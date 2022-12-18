@@ -1,6 +1,6 @@
-const LocalStrategy = require("passport-local").Strategy;
-const { pool } = require("./dbConfig");
-const bcrypt = require("bcrypt");
+const LocalStrategy = require('passport-local').Strategy;
+const { pool } = require('./dbConfig');
+const bcrypt = require('bcrypt');
 
 function initialize(passport) {
   const authenticateUser = (email, password, done) => {
@@ -26,14 +26,14 @@ function initialize(passport) {
             } else {
               //password is incorrect
               return done(null, false, {
-                message: "Password is incorrect",
+                message: 'Password is incorrect',
               });
             }
           });
         } else {
           // No user
           return done(null, false, {
-            message: "No user with that email address",
+            message: 'No user with that email address',
           });
         }
       }
@@ -42,7 +42,7 @@ function initialize(passport) {
 
   passport.use(
     new LocalStrategy(
-      { usernameField: "email", passwordField: "password" },
+      { usernameField: 'email', passwordField: 'password' },
       authenticateUser
     )
   );
