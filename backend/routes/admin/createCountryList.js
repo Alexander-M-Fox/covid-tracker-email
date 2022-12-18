@@ -11,28 +11,28 @@ const { covidRead } = require("../../commonFunctions");
  */
 //#endregion
 router.get("/createCountryList", (req, res) => {
-    let countries = [];
+  let countries = [];
 
-    for (let i = 0; i < covidRead.length; i++) {
-        countries.push({
-            name: covidRead[i].country,
-            iso2: covidRead[i].countryInfo.iso2,
-            iso3: covidRead[i].countryInfo.iso3,
-        });
-    }
+  for (let i = 0; i < covidRead.length; i++) {
+    countries.push({
+      name: covidRead[i].country,
+      iso2: covidRead[i].countryInfo.iso2,
+      iso3: covidRead[i].countryInfo.iso3,
+    });
+  }
 
-    // write the countries out in a different file
+  // write the countries out in a different file
 
-    try {
-        fs.writeFileSync(
-            path.join(__dirname, "countries.json"),
-            JSON.stringify(countries),
-        );
-        res.json({ msg: "Covid data updated", success: "true" });
-    } catch (err) {
-        console.error(err);
-        res.json({ msg: "Error writing covid data", success: "false" });
-    }
+  try {
+    fs.writeFileSync(
+      path.join(__dirname, "countries.json"),
+      JSON.stringify(countries)
+    );
+    res.json({ msg: "Covid data updated", success: "true" });
+  } catch (err) {
+    console.error(err);
+    res.json({ msg: "Error writing covid data", success: "false" });
+  }
 });
 
 module.exports = router;

@@ -6,14 +6,14 @@ Ongoing project to simplify comparing and keeping track of COVID 19 statistics f
 
 ## Implemented Features
 
--   Pick what countries stats interest you
--   Compare recent COVID statistics displayed neatly on one page
--   Send statistics to discord webhook
+- Pick what countries stats interest you
+- Compare recent COVID statistics displayed neatly on one page
+- Send statistics to discord webhook
 
 ## To Be Developed
 
--   Subscribe to get emails on covid statistics
--   Optional daily discord notifications
+- Subscribe to get emails on covid statistics
+- Optional daily discord notifications
 
 ## Technologies
 

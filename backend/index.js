@@ -12,10 +12,10 @@ const session = require("express-session");
 require("dotenv").config();
 const initializePassport = require("./passportConfig");
 const {
-    blockAuthenticated,
-    blockNotAuthenticated,
-    covidRead,
-    readJson,
+  blockAuthenticated,
+  blockNotAuthenticated,
+  covidRead,
+  readJson,
 } = require("./commonFunctions");
 
 // Initialisation
@@ -23,30 +23,30 @@ const app = express();
 initializePassport(passport);
 
 const logger = (req, res, next) => {
-    console.log(
-        `${req.method}  -  ${req.protocol}://${req.get("host")}${
-            req.originalUrl
-        }  -  ${moment().format()}`,
-    );
-    next();
+  console.log(
+    `${req.method}  -  ${req.protocol}://${req.get("host")}${
+      req.originalUrl
+    }  -  ${moment().format()}`
+  );
+  next();
 };
 
 // Middleware
 app.use(express.json());
 app.use(logger);
 app.use(
-    bodyParser.urlencoded({
-        extended: true,
-    }),
+  bodyParser.urlencoded({
+    extended: true,
+  })
 );
 
 // Passport and session management
 app.use(
-    session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false,
-    }),
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
