@@ -100,7 +100,7 @@ const config = {
 
     /* Run your local dev server before starting the tests */
     webServer: {
-        command: 'yarn run start-pipeline',
+        command: 'yarn run start',
         port: 3000,
     },
 };
