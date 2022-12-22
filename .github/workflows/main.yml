@@ -49,7 +49,7 @@ jobs:
               run: yarn playwright install --with-deps
             - name: Run frontend
               working-directory: ./frontend
-              run: yarn start
+              run: yarn run start-pipeline
             - name: Run Playwright tests
               working-directory: ./frontend
               run: yarn playwright test
