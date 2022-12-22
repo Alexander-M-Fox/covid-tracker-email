@@ -47,12 +47,15 @@ jobs:
             - name: Install Playwright Browsers
               working-directory: ./frontend
               run: yarn playwright install --with-deps
+            - name: Run frontend
+              working-directory: ./frontend
+              run: yarn start
             - name: Run Playwright tests
               working-directory: ./frontend
               run: yarn playwright test
-            - uses: actions/upload-artifact@v3
-              if: always()
-              with:
-                  name: playwright-report
-                  path: playwright-report/
-                  retention-days: 30
+            # - uses: actions/upload-artifact@v3
+            #   if: always()
+            #   with:
+            #       name: playwright-report
+            #       path: playwright-report/
+            #       retention-days: 30
