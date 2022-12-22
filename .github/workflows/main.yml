@@ -42,10 +42,13 @@ jobs:
               with:
                   node-version: 16
             - name: Install dependencies
+              working-directory: ./frontend
               run: yarn
             - name: Install Playwright Browsers
+              working-directory: ./frontend
               run: yarn playwright install --with-deps
             - name: Run Playwright tests
+              working-directory: ./frontend
               run: yarn playwright test
             - uses: actions/upload-artifact@v3
               if: always()
