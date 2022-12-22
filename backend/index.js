@@ -9,7 +9,9 @@ const CronJob = require('cron').CronJob;
 const { pool } = require('./dbConfig');
 const passport = require('passport');
 const session = require('express-session');
-require('dotenv').config();
+require('dotenv').config({
+    path: '/home/beardo/projects/covid-tracker-email/backend/.env',
+});
 const initializePassport = require('./passportConfig');
 const {
     blockAuthenticated,

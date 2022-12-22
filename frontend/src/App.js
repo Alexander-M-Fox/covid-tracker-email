@@ -59,7 +59,8 @@ function App() {
                 <Route exact path="/">
                     <p>
                         TODO NEXT: separate the update page from the notify page
-                        for improved encapsulation and potential UI changes
+                        for improved encapsulation and potential UI changes BUT
+                        FIRST: fix create account validation error issue
                     </p>
                     <div className="vertFlex">
                         <SelectCountry

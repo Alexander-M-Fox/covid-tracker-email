@@ -54,7 +54,7 @@ router.post('/register', blockAuthenticated, async (req, res) => {
         // validation passed
         let hashedPassword = await bcrypt.hash(password, 10);
         pool.query(
-            `SELECT * FROM account_tbl WHERE email = $1`,
+            `SELECT * FROM account_tbl WHERE email = $1;`,
             [email],
             (err, results) => {
                 if (err) {
