@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const axios = require("axios").default;
-const { pool } = require("../dbConfig");
-require("dotenv").config();
+const axios = require('axios').default;
+const { pool } = require('../dbConfig');
+require('dotenv').config();
 const {
-  blockNotAuthenticated,
-  covidRead,
-  postDiscordWebhook,
-} = require("../commonFunctions");
+    blockNotAuthenticated,
+    covidRead,
+    postDiscordWebhook,
+} = require('../commonFunctions');
 
 //#region
 /**
@@ -18,56 +18,56 @@ const {
  * @param {string} [outputs] false - Sent if discord message was NOT sent successfully.
  */
 //#endregion
-router.get("/fetchSettings", blockNotAuthenticated, async (req, res) => {
-  const userID = req.user.acc_id;
+router.get('/fetchSettings', blockNotAuthenticated, async (req, res) => {
+    const userID = req.user.acc_id;
 
-  let promises = [];
+    let promises = [];
 
-  // see if user already has webhook
-  const webhookQuery = pool.query(
-    `SELECT webhook_url
+    // see if user already has webhook
+    const webhookQuery = pool.query(
+        `SELECT webhook_url
 	            FROM webhook_tbl
 	            WHERE acc_id=$1`,
-    [userID]
-  );
+        [userID]
+    );
 
-  promises.push(webhookQuery);
+    promises.push(webhookQuery);
 
-  const accountQuery = pool.query(
-    `
+    const accountQuery = pool.query(
+        `
         SELECT send_emails FROM account_tbl WHERE acc_id=$1;
         `,
-    [userID]
-  );
+        [userID]
+    );
 
-  promises.push(accountQuery);
+    promises.push(accountQuery);
 
-  let returnData = {};
+    let returnData = {};
 
-  try {
-    // used var so responses can be accessed outside try catch
-    var responses = await Promise.all(promises);
-  } catch (error) {
-    res.send("error");
-    console.error(error);
-  }
+    try {
+        // used var so responses can be accessed outside try catch
+        var responses = await Promise.all(promises);
+    } catch (error) {
+        res.send('error');
+        console.error(error);
+    }
 
-  if (responses[0].rows.length > 0) {
-    console.log("webhook for that user found");
+    if (responses[0].rows.length > 0) {
+        console.log('webhook for that user found');
 
-    returnData.webhook = true;
-    returnData.webhookData = responses[0].rows[0].webhook_url;
-  }
+        returnData.webhook = true;
+        returnData.webhookData = responses[0].rows[0].webhook_url;
+    }
 
-  if (responses[1].rows.length > 0) {
-    console.log("user has an account");
-    returnData.sendEmails = responses[1].rows[0].send_emails;
-  }
+    if (responses[1].rows.length > 0) {
+        console.log('user has an account');
+        returnData.sendEmails = responses[1].rows[0].send_emails;
+    }
 
-  console.log("return data:");
-  console.log(returnData);
+    console.log('return data:');
+    console.log(returnData);
 
-  res.send(returnData);
+    res.send(returnData);
 });
 
 module.exports = router;
