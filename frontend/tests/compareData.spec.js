@@ -14,11 +14,11 @@ test('compare country data', async ({ page }) => {
     const plusBtns = await page.locator('.plus');
     await expect(await plusBtns.count()).toBe(2);
 
-    // for (const plusSign of await page.locator('.plus').all()) {
-    //     await plusSign.click(); // unsure as to whether this is currently working
-    // }
+    // await page.locator('.plus>>nth=0').click();
+    // await page.locator('.plus>>nth=1').click();
 
-    // const bottomBar = await page.locator('.bottomBar');
-    // expect(bottomBar).toContainText('uk');
-    // expect(bottomBar).toContainText('ukraine');
+    // const text1 = await page.locator('.bottomBar>>p>>nth=0');
+    // const text2 = await page.locator('.bottomBar>>p>>nth=1');
+    // expect(text1).toContainText('uk');
+    // expect(text2).toContainText('ukraine');
 });
