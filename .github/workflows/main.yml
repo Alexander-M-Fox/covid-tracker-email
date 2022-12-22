@@ -47,12 +47,9 @@ jobs:
             - name: Install Playwright Browsers
               working-directory: ./frontend
               run: yarn playwright install --with-deps
-            - name: Run frontend
+            - name: Run frontend and Playwright tests
               working-directory: ./frontend
-              run: yarn run start-pipeline
-            - name: Run Playwright tests
-              working-directory: ./frontend
-              run: yarn playwright test
+              run: yarn run start-pipeline & yarn playwright test
             # - uses: actions/upload-artifact@v3
             #   if: always()
             #   with:
