@@ -1,6 +1,4 @@
-require('dotenv').config({
-    path: '/home/beardo/projects/covid-tracker-email/backend/.env',
-});
+require('dotenv').config();
 
 const { Pool } = require('pg');
 
