@@ -47,10 +47,10 @@ jobs:
               run: yarn
             - name: Initialise database phase 1
               working-directory: ./backend
-              run: sudo -i -u postgres -f sql_setup_1.sql
+              run: psql -f sql_setup_1.sql
             - name: Initialise database phase 2
               working-directory: ./backend
-              run: sudo psql -U covid-tracker-user -h 127.0.0.1 covid-tracker-email -f sql_setup_2.sql
+              run: psql -U covid-tracker-user -h 127.0.0.1 covid-tracker-email -f sql_setup_2.sql
             - name: Install Playwright Browsers
               working-directory: ./frontend
               run: yarn playwright install --with-deps
