@@ -35,7 +35,6 @@ backend/*.log
 backend/*.gz
 backend/.vscode
 
-
 # Coveralls
 backend/coverage
 
@@ -46,3 +45,6 @@ backend/benchmarks/graphs
 backend/.env
 frontend/.env
 .env
+
+# Custom
+backend/installdb.sh

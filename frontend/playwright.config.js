@@ -52,19 +52,19 @@ const config = {
             },
         },
 
-        {
-            name: 'firefox',
-            use: {
-                ...devices['Desktop Firefox'],
-            },
-        },
+        // {
+        //     name: 'firefox',
+        //     use: {
+        //         ...devices['Desktop Firefox'],
+        //     },
+        // },
 
-        {
-            name: 'webkit',
-            use: {
-                ...devices['Desktop Safari'],
-            },
-        },
+        // {
+        //     name: 'webkit',
+        //     use: {
+        //         ...devices['Desktop Safari'],
+        //     },
+        // },
 
         /* Test against mobile viewports. */
         // {
@@ -99,10 +99,16 @@ const config = {
     // outputDir: 'test-results/',
 
     /* Run your local dev server before starting the tests */
-    webServer: {
-        command: 'yarn run start',
-        port: 3000,
-    },
+    webServer: [
+        {
+            command: 'yarn run start',
+            port: 3000,
+        },
+        {
+            command: 'cd ../backend && yarn run start',
+            port: 5000,
+        },
+    ],
 };
 
 module.exports = config;

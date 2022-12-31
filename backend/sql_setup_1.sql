@@ -18,5 +18,5 @@ CREATE DATABASE "covid-tracker-email"
     ENCODING = 'UTF8'
     CONNECTION LIMIT = -1;
 
-RAISE NOTICE 'Please exit shell, run \'psql -U covid-tracker-user -h 127.0.0.1 covid-tracker-email\', and run script 2.'; 
+--run 'psql -U covid-tracker-user -h 127.0.0.1 covid-tracker-email' and run script 2
 
