@@ -20,3 +20,4 @@ CREATE DATABASE "covid-tracker-email"
 
 --run 'psql -U covid-tracker-user -h 127.0.0.1 covid-tracker-email' and run script 2
 
+-- https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers#testing-the-postgresql-service-container follow this TODO next
