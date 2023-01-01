@@ -6,7 +6,7 @@ on:
         branches: [main]
     workflow_dispatch:
 jobs:
-    build:
+    docs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -48,8 +48,9 @@ jobs:
             - name: Install postgres
               working-directory: ./backend
               run: |
-                  sudo apt install postgresql postgresql-contrib
-                  sudo systemctl start postgresql.service
+                  sudo apt install postgresql postgresql-contrib -y
+                  apt show postgresql
+                  sudo systemctl restart postgresql.service
             - name: Initialise database phase 1
               working-directory: ./backend
               run: psql -f sql_setup_1.sql
