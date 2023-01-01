@@ -50,8 +50,6 @@ jobs:
               run: |
                   sudo apt install postgresql postgresql-contrib
                   sudo systemctl start postgresql.service
-                  psql -U postgres -f sql_setup_1.sql
-                  psql -U covid-tracker-user -h 127.0.0.1 covid-tracker-email -f sql_setup_2.sql
             - name: Initialise database phase 1
               working-directory: ./backend
               run: psql -f sql_setup_1.sql
