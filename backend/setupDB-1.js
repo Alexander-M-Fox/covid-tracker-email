@@ -37,4 +37,5 @@ pgclient.query(role, (err, res) => {
 
 pgclient.query(database, (err, res) => {
     if (err) throw err;
+    pgclient.end();
 });

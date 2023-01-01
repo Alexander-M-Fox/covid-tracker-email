@@ -72,4 +72,5 @@ pgclient.query(country, (err, res) => {
 
 pgclient.query(webhook, (err, res) => {
     if (err) throw err;
+    pgclient.end();
 });
