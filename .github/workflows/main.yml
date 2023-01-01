@@ -69,3 +69,5 @@ jobs:
             - name: Run Playwright tests
               working-directory: ./frontend
               run: yarn playwright test
+              env:
+                  SESSION_SECRET: sessionsecret
