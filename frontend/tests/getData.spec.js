@@ -17,7 +17,7 @@ test('test', async ({ page }) => {
     await page.getByRole('button', { name: '+' }).nth(1).click();
 
     // check all 4 countries appear in bottom bar
-    await expect(await page.getByText('uk').first()).toHaveText('ukabcd'); // deliberate breakage
+    await expect(await page.getByText('uk').first()).toHaveText('uk');
     await expect(await page.getByText('ukraine')).toHaveText('ukraine');
     await expect(await page.getByText('france')).toHaveText('france');
     await expect(await page.getByText('germany').nth(1)).toHaveText('germany');

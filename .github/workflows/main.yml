@@ -50,8 +50,6 @@ jobs:
               run: node setupDB-1.js
               env:
                   POSTGRES_PASSWORD: ${{ secrets.postgres_password }}
-                  POSTGRES_USER: ${{ secrets.DB_USER }}
-                  POSTGRES_DB: ${{ secrets.DB_DATABASE }}
                   POSTGRES_HOST: localhost
                   POSTGRES_PORT: 5432
             - name: Initialise database phase 2
