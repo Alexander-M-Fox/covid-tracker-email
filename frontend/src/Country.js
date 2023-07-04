@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 
-function Country({ country, compareList, addCountry }) {
+export default Country = ({ country, compareList, addCountry }) => {
     let thisStyle = {};
     for (let c in compareList) {
         if (compareList[c].name === country) {
@@ -29,5 +29,3 @@ function Country({ country, compareList, addCountry }) {
         </div>
     );
 }
-
-export default Country;
